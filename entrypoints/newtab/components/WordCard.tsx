@@ -56,30 +56,34 @@ const AudioButton = ({ onClick, title }: { onClick: () => void; title: string })
   </motion.button>
 );
 
-// Animated Bookmark Button with fill effect
-const AnimatedBookmark = ({ isSaved }: { isSaved: boolean }) => (
-  <div className="relative w-6 h-6">
-    {/* 空心书签 - 底层 */}
-    <Bookmark 
-      className="w-6 h-6 absolute inset-0 transition-colors duration-300"
-      strokeWidth={2}
-      fill={isSaved ? "currentColor" : "transparent"}
-    />
-    {/* 实心书签 - 上层，带填充动画 */}
-    <motion.div
-      initial={{ clipPath: "inset(100% 0 0 0)" }}
-      animate={{ clipPath: isSaved ? "inset(0% 0 0 0)" : "inset(100% 0 0 0)" }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="absolute inset-0"
-    >
+// Animated Bookmark with fill effect - 从下往上填充
+const AnimatedBookmark = ({ isSaved }: { isSaved: boolean }) => {
+  return (
+    <div className="relative w-6 h-6 overflow-hidden">
+      {/* 空心书签 */}
       <Bookmark 
-        className="w-6 h-6"
+        className="w-6 h-6 absolute inset-0"
         strokeWidth={2}
-        fill="currentColor"
+        fill="none"
       />
-    </motion.div>
-  </div>
-);
+      {/* 实心书签 - 从下往上填充 */}
+      <motion.div
+        className="absolute inset-0"
+        initial={{ y: "100%" }}
+        animate={{ y: isSaved ? "0%" : "100%" }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        style={{ overflow: "hidden" }}
+      >
+        <Bookmark 
+          className="w-6 h-6"
+          strokeWidth={2}
+          fill="currentColor"
+          stroke="currentColor"
+        />
+      </motion.div>
+    </div>
+  );
+};
 
 export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isSaved }: WordCardProps) {
   if (!word) {

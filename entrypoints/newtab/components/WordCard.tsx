@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Volume2, ExternalLink, Check, RotateCcw } from 'lucide-react';
+import { Volume2, Search, Bookmark, Shuffle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import type { Word, CEFRLevel } from '../types';
 import { CEFR_LEVELS } from '../types';
@@ -74,18 +74,12 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
         </p>
         <motion.button
           onClick={onNext}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transition-shadow"
+          className="p-4 bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition-all"
+          title="Start over"
         >
-          <motion.div
-            initial={{ rotate: 0 }}
-            whileHover={{ rotate: -360 }}
-            transition={{ duration: 0.5 }}
-          >
-            <RotateCcw className="w-4 h-4" />
-          </motion.div>
-          Start Over
+          <Shuffle className="w-6 h-6" />
         </motion.button>
       </div>
     );
@@ -192,61 +186,41 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.35 }}
-        className="flex items-center gap-3 mt-4"
+        className="flex items-center gap-4 mt-6"
       >
-        {/* Dictionary Link */}
+        {/* Dictionary Link - Search */}
         <motion.a
           href={getDictionaryUrl(word.word)}
           target="_blank"
           rel="noopener noreferrer"
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="p-3 bg-secondary rounded-lg text-muted-foreground hover:text-primary transition-colors shadow-md hover:shadow-lg"
-          title="Open SpanishDict"
+          className="p-4 bg-secondary rounded-xl text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all shadow-md hover:shadow-lg"
+          title="Look up in dictionary"
         >
-          <ExternalLink className="w-5 h-5" />
+          <Search className="w-6 h-6" />
         </motion.a>
         
-        {/* Learned Button */}
+        {/* Save/Learn Button */}
         <motion.button
           onClick={onLearn}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transition-shadow relative overflow-hidden group"
+          className="p-4 bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition-all"
+          title="Mark as learned"
         >
-          <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors" />
-          <motion.div
-            initial={{ scale: 1 }}
-            whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0] }}
-            transition={{ duration: 0.3 }}
-          >
-            <Check className="w-4 h-4 relative z-10" />
-          </motion.div>
-          <span className="relative z-10">Learned</span>
+          <Bookmark className="w-6 h-6" />
         </motion.button>
         
-        {/* Next Button */}
+        {/* Random Next Button */}
         <motion.button
           onClick={onNext}
-          whileHover={{ scale: 1.05, x: 3 }}
+          whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="px-6 py-3 bg-secondary text-secondary-foreground rounded-lg font-medium shadow-md hover:shadow-lg transition-shadow group"
+          className="p-4 bg-secondary rounded-xl text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all shadow-md hover:shadow-lg"
+          title="Next random word"
         >
-          <motion.span
-            initial={{ x: 0 }}
-            whileHover={{ x: 3 }}
-            transition={{ duration: 0.2 }}
-            className="inline-flex items-center gap-1"
-          >
-            Next
-            <motion.span
-              className="inline-block"
-              initial={{ x: 0 }}
-              whileHover={{ x: 3 }}
-            >
-              →
-            </motion.span>
-          </motion.span>
+          <Shuffle className="w-6 h-6" />
         </motion.button>
       </motion.div>
     </motion.div>

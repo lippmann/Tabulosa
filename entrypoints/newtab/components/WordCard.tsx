@@ -1,5 +1,5 @@
-import { motion } from 'motion/react';
-import { Volume2, Search, Bookmark, BookmarkCheck, Shuffle } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Volume2, Search, Bookmark, Shuffle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import type { Word, CEFRLevel } from '../types';
 import { CEFR_LEVELS } from '../types';
@@ -54,6 +54,31 @@ const AudioButton = ({ onClick, title }: { onClick: () => void; title: string })
       <Volume2 className="w-5 h-5 md:w-6 md:h-6" />
     </motion.div>
   </motion.button>
+);
+
+// Animated Bookmark Button with fill effect
+const AnimatedBookmark = ({ isSaved }: { isSaved: boolean }) => (
+  <div className="relative w-6 h-6">
+    {/* 空心书签 - 底层 */}
+    <Bookmark 
+      className="w-6 h-6 absolute inset-0 transition-colors duration-300"
+      strokeWidth={2}
+      fill={isSaved ? "currentColor" : "transparent"}
+    />
+    {/* 实心书签 - 上层，带填充动画 */}
+    <motion.div
+      initial={{ clipPath: "inset(100% 0 0 0)" }}
+      animate={{ clipPath: isSaved ? "inset(0% 0 0 0)" : "inset(100% 0 0 0)" }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="absolute inset-0"
+    >
+      <Bookmark 
+        className="w-6 h-6"
+        strokeWidth={2}
+        fill="currentColor"
+      />
+    </motion.div>
+  </div>
 );
 
 export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isSaved }: WordCardProps) {
@@ -205,12 +230,9 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
         
         {/* Save Button */}
         <motion.button
-          key={isSaved ? 'saved' : 'unsaved'}
           onClick={onSave}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          initial={{ scale: 1 }}
-          animate={{ scale: 1 }}
           className={cn(
             "p-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg",
             isSaved 
@@ -219,18 +241,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
           )}
           title={isSaved ? "Remove from saved" : "Save word"}
         >
-          <motion.div
-            key={isSaved ? 'icon-saved' : 'icon-unsaved'}
-            initial={{ scale: 0.5, rotate: -30 }}
-            animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-          >
-            {isSaved ? (
-              <BookmarkCheck className="w-6 h-6" />
-            ) : (
-              <Bookmark className="w-6 h-6" />
-            )}
-          </motion.div>
+          <AnimatedBookmark isSaved={isSaved} />
         </motion.button>
         
         {/* Random Next Button */}

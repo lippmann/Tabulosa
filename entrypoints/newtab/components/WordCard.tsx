@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Volume2, Search, Bookmark, Shuffle } from 'lucide-react';
+import { Volume2, Search, Bookmark, BookmarkCheck, Shuffle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import type { Word, CEFRLevel } from '../types';
 import { CEFR_LEVELS } from '../types';
@@ -10,6 +10,8 @@ interface WordCardProps {
   showPronunciation: boolean;
   onLearn: () => void;
   onNext: () => void;
+  onSave: () => void;
+  isSaved: boolean;
 }
 
 // CEFR Level Colors
@@ -54,7 +56,7 @@ const AudioButton = ({ onClick, title }: { onClick: () => void; title: string })
   </motion.button>
 );
 
-export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardProps) {
+export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isSaved }: WordCardProps) {
   if (!word) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] text-center animate-fade-in">
@@ -201,15 +203,24 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
           <Search className="w-6 h-6" />
         </motion.a>
         
-        {/* Save/Learn Button */}
+        {/* Save Button */}
         <motion.button
-          onClick={onLearn}
+          onClick={onSave}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="p-4 bg-secondary rounded-xl text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all shadow-md hover:shadow-lg"
-          title="Mark as learned"
+          className={cn(
+            "p-4 rounded-xl transition-all shadow-md hover:shadow-lg",
+            isSaved 
+              ? "bg-primary text-primary-foreground" 
+              : "bg-secondary text-muted-foreground hover:text-primary hover:bg-secondary/80"
+          )}
+          title={isSaved ? "Remove from saved" : "Save word"}
         >
-          <Bookmark className="w-6 h-6" />
+          {isSaved ? (
+            <BookmarkCheck className="w-6 h-6" />
+          ) : (
+            <Bookmark className="w-6 h-6" />
+          )}
         </motion.button>
         
         {/* Random Next Button */}

@@ -1,10 +1,12 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Settings as SettingsIcon, X, Check, Sun, Moon } from 'lucide-react';
+import { Settings as SettingsIcon, X, Check, Sun, Moon, Trash2, Volume2, Bookmark } from 'lucide-react';
+import { useAtomValue } from 'jotai';
 import { useSettings } from '../hooks/use-settings';
-import { useData } from '../hooks/use-data';
+import { useData, savedWordsAtom } from '../hooks/use-data';
 import { cn } from '../lib/utils';
 import type { CEFRLevel, ThemeMode } from '../types';
 import { CEFR_LEVELS } from '../types';
+import { speakSpanish } from '../hooks/use-vocab';
 
 interface SettingsProps {
   isOpen: boolean;
@@ -29,9 +31,19 @@ const themeOptions: { value: ThemeMode; label: string; icon: typeof Sun }[] = [
 
 export function Settings({ isOpen, onClose }: SettingsProps) {
   const { settings, updateSettings, resetSettings, setTheme } = useSettings();
-  const { switchLevel } = useData();
+  const { switchLevel, removeSaved } = useData();
+  const savedWords = useAtomValue(savedWordsAtom);
 
   const currentTheme = settings.theme || 'light';
+
+  const handlePlayWord = async (word: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      await speakSpanish(word);
+    } catch (err) {
+      console.error('Failed to play audio:', err);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -67,6 +79,74 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                 >
                   <X className="w-5 h-5 text-foreground" />
                 </button>
+              </div>
+
+              {/* Saved Words Section */}
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4">
+                  <Bookmark className="w-5 h-5 text-primary" />
+                  <h3 className="text-lg font-semibold text-foreground">
+                    Saved Words
+                    {savedWords.length > 0 && (
+                      <span className="ml-2 text-sm font-normal text-muted-foreground">
+                        ({savedWords.length})
+                      </span>
+                    )}
+                  </h3>
+                </div>
+                
+                {savedWords.length === 0 ? (
+                  <div className="p-6 bg-muted rounded-lg text-center">
+                    <p className="text-muted-foreground text-sm">
+                      No saved words yet. Click the bookmark icon on a word card to save it.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-2 max-h-64 overflow-y-auto">
+                    {savedWords.map((word) => (
+                      <motion.div
+                        key={word.word}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 20 }}
+                        className="flex items-center justify-between p-3 bg-secondary rounded-lg group"
+                      >
+                        <div className="flex items-center gap-3 flex-1 min-w-0">
+                          <span className={cn(
+                            'px-2 py-0.5 rounded text-xs text-white font-medium shrink-0',
+                            levelColors[word.cefr_level]
+                          )}>
+                            {word.cefr_level}
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <div className="font-medium text-foreground truncate">
+                              {word.word}
+                            </div>
+                            <div className="text-xs text-muted-foreground truncate">
+                              {word.english_translation}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            onClick={(e) => handlePlayWord(word.word, e)}
+                            className="p-2 hover:bg-background rounded-lg transition-colors"
+                            title="Play pronunciation"
+                          >
+                            <Volume2 className="w-4 h-4 text-muted-foreground hover:text-primary" />
+                          </button>
+                          <button
+                            onClick={() => removeSaved(word.word)}
+                            className="p-2 hover:bg-destructive/20 rounded-lg transition-colors"
+                            title="Remove from saved"
+                          >
+                            <Trash2 className="w-4 h-4 text-muted-foreground hover:text-destructive" />
+                          </button>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {/* Theme Selection */}

@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Settings as SettingsIcon, Book } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useAtomValue } from 'jotai';
 import { WordCard } from './components/WordCard';
 import { Settings } from './components/Settings';
 import { useTheme } from './hooks/use-theme';
 import { useLoadWords, preloadVoices } from './hooks/use-vocab';
-import { useRandomWord, useData } from './hooks/use-data';
+import { useRandomWord, useData, savedAtom } from './hooks/use-data';
 import { useSettings, pronunciationAtom } from './hooks/use-settings';
-import { useAtomValue } from 'jotai';
 
 export default function App() {
   const [showSettings, setShowSettings] = useState(false);
@@ -25,8 +25,9 @@ export default function App() {
   }, []);
   
   const { randomWord, next } = useRandomWord();
-  const { addLearned } = useData();
+  const { addLearned, toggleSaved } = useData();
   const showPronunciation = useAtomValue(pronunciationAtom);
+  const savedWords = useAtomValue(savedAtom);
 
   const handleLearn = () => {
     if (randomWord) {
@@ -38,6 +39,14 @@ export default function App() {
   const handleNext = () => {
     next();
   };
+
+  const handleSave = () => {
+    if (randomWord) {
+      toggleSaved(randomWord.word);
+    }
+  };
+
+  const isSaved = randomWord ? savedWords.includes(randomWord.word) : false;
 
   return (
     <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
@@ -80,6 +89,8 @@ export default function App() {
           showPronunciation={showPronunciation}
           onLearn={handleLearn}
           onNext={handleNext}
+          onSave={handleSave}
+          isSaved={isSaved}
         />
       </main>
 

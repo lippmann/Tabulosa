@@ -8,6 +8,7 @@ import type { CEFRLevel, Word, CEFRLevels } from '../types';
 export const wordsAtom = atom<Word[]>([]);
 export const learnedAtom = atomWithStorage<string[]>(`${KEY}-learned`, []);
 export const metAtom = atomWithStorage<string[]>(`${KEY}-met`, []);
+export const savedAtom = atomWithStorage<string[]>(`${KEY}-saved`, []);
 
 export const enabledLevelsAtom = atom<CEFRLevel[]>(get => {
   const settings = get(settingsAtom);
@@ -47,6 +48,19 @@ export const learnedWordsAtom = atom<Word[]>(get => {
   return result;
 });
 
+export const savedWordsAtom = atom<Word[]>(get => {
+  const saved = get(savedAtom);
+  const words = get(wordsAtom);
+  const result = [];
+
+  for (const word of saved) {
+    const _w = words.find(w => w.word === word);
+    if (_w) result.push(_w);
+  }
+
+  return result;
+});
+
 export function useRandomWord() {
   const rest = useAtomValue(restOfWordsAtom);
   const mode = useAtomValue(modeAtom);
@@ -68,6 +82,7 @@ export function useRandomWord() {
 export function useData() {
   const setSettings = useSetAtom(settingsAtom);
   const setLearned = useSetAtom(learnedAtom);
+  const setSaved = useSetAtom(savedAtom);
 
   function switchLevel(level: CEFRLevel) {
     setSettings((prev) => ({
@@ -89,5 +104,18 @@ export function useData() {
     setLearned(p => p.filter(word => word !== value));
   }
 
-  return { switchLevel, addLearned, removeLearned };
+  function toggleSaved(value: string) {
+    setSaved(p => {
+      if (p.includes(value)) {
+        return p.filter(word => word !== value);
+      }
+      return [value, ...p];
+    });
+  }
+
+  function removeSaved(value: string) {
+    setSaved(p => p.filter(word => word !== value));
+  }
+
+  return { switchLevel, addLearned, removeLearned, toggleSaved, removeSaved };
 }

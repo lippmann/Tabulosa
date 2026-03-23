@@ -20,22 +20,15 @@ export interface Word {
 
 export type Mode = 'ichigoichie' | 'random';
 
-// Theme types
-export type ThemeName = 'rose' | 'indigo' | 'emerald' | 'violet' | 'amber' | 'slate' | 'ocean' | 'coral';
-
-export interface ThemeColors {
-  name: ThemeName;
-  label: string;
-  primary: string;
-  ring: string;
-}
+// Theme types - only light and dark
+export type ThemeMode = 'light' | 'dark';
 
 export interface Settings {
   version: string;
   mode: Mode;
   levels: CEFRLevels;
   pronunciation: boolean;
-  theme: ThemeName;
+  theme: ThemeMode;
 }
 
 // CEFR Level Information
@@ -70,56 +63,4 @@ export const CEFR_LEVELS: Record<CEFRLevel, { label: string; description: string
     description: 'Full mastery, native-like',
     vocabulary: '15000+'
   }
-};
-
-// Theme configurations - Elegant solid colors
-export const THEMES: Record<ThemeName, ThemeColors> = {
-  rose: {
-    name: 'rose',
-    label: 'Rose',
-    primary: '#e11d48',
-    ring: '#e11d48',
-  },
-  indigo: {
-    name: 'indigo',
-    label: 'Indigo',
-    primary: '#4f46e5',
-    ring: '#4f46e5',
-  },
-  emerald: {
-    name: 'emerald',
-    label: 'Emerald',
-    primary: '#059669',
-    ring: '#059669',
-  },
-  violet: {
-    name: 'violet',
-    label: 'Violet',
-    primary: '#7c3aed',
-    ring: '#7c3aed',
-  },
-  amber: {
-    name: 'amber',
-    label: 'Amber',
-    primary: '#d97706',
-    ring: '#d97706',
-  },
-  slate: {
-    name: 'slate',
-    label: 'Slate',
-    primary: '#475569',
-    ring: '#475569',
-  },
-  ocean: {
-    name: 'ocean',
-    label: 'Ocean',
-    primary: '#0369a1',
-    ring: '#0369a1',
-  },
-  coral: {
-    name: 'coral',
-    label: 'Coral',
-    primary: '#f97316',
-    ring: '#f97316',
-  },
 };

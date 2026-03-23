@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
+/* Light theme (default) */
 @theme {
   --color-background: #fafafa;
   --color-foreground: #18181b;
   --color-card: #ffffff;
   --color-card-foreground: #18181b;
-  /* Primary color will be set dynamically via JS */
   --color-primary: #e11d48;
   --color-primary-foreground: #fafafa;
   --color-secondary: #f4f4f5;
@@ -18,15 +18,29 @@
   --color-destructive-foreground: #fafafa;
   --color-border: #e4e4e7;
   --color-input: #e4e4e7;
-  /* Ring color will be set dynamically via JS */
   --color-ring: #e11d48;
   --radius: 0.75rem;
-  
-  --color-level-1: #22c55e;
-  --color-level-2: #3b82f6;
-  --color-level-3: #f59e0b;
-  --color-level-4: #ef4444;
-  --color-level-5: #8b5cf6;
+}
+
+/* Dark theme overrides */
+.dark {
+  --color-background: #0a0a0a;
+  --color-foreground: #fafafa;
+  --color-card: #171717;
+  --color-card-foreground: #fafafa;
+  --color-primary: #f43f5e;
+  --color-primary-foreground: #fafafa;
+  --color-secondary: #262626;
+  --color-secondary-foreground: #fafafa;
+  --color-muted: #262626;
+  --color-muted-foreground: #a1a1aa;
+  --color-accent: #262626;
+  --color-accent-foreground: #fafafa;
+  --color-destructive: #7f1d1d;
+  --color-destructive-foreground: #fafafa;
+  --color-border: #262626;
+  --color-input: #262626;
+  --color-ring: #f43f5e;
 }
 
 * {
@@ -37,12 +51,7 @@ body {
   background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-}
-
-/* Ensure CSS variables can be overridden */
-:root {
-  --color-primary: #e11d48;
-  --color-ring: #e11d48;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 @keyframes fade-in {

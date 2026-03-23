@@ -1,10 +1,10 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Settings as SettingsIcon, X, Check } from 'lucide-react';
+import { Settings as SettingsIcon, X, Check, Sun, Moon } from 'lucide-react';
 import { useSettings } from '../hooks/use-settings';
 import { useData } from '../hooks/use-data';
 import { cn } from '../lib/utils';
-import type { CEFRLevel, ThemeName } from '../types';
-import { CEFR_LEVELS, THEMES } from '../types';
+import type { CEFRLevel, ThemeMode } from '../types';
+import { CEFR_LEVELS } from '../types';
 
 interface SettingsProps {
   isOpen: boolean;
@@ -21,30 +21,17 @@ const levelColors: Record<CEFRLevel, string> = {
   C2: 'bg-red-500',
 };
 
-// Theme color swatches for preview
-const themeSwatches: Record<ThemeName, string> = {
-  rose: '#e11d48',
-  indigo: '#4f46e5',
-  emerald: '#059669',
-  violet: '#7c3aed',
-  amber: '#d97706',
-  slate: '#475569',
-  ocean: '#0369a1',
-  coral: '#f97316',
-};
-
-// Default theme for fallback
-const DEFAULT_THEME: ThemeName = 'rose';
+// Theme options
+const themeOptions: { value: ThemeMode; label: string; icon: typeof Sun }[] = [
+  { value: 'light', label: 'Light', icon: Sun },
+  { value: 'dark', label: 'Dark', icon: Moon },
+];
 
 export function Settings({ isOpen, onClose }: SettingsProps) {
   const { settings, updateSettings, resetSettings, setTheme } = useSettings();
   const { switchLevel } = useData();
 
-  const themes = Object.values(THEMES);
-  
-  // Get current theme with fallback
-  const currentTheme = settings.theme || DEFAULT_THEME;
-  const currentThemeInfo = THEMES[currentTheme] || THEMES.rose;
+  const currentTheme = settings.theme || 'light';
 
   return (
     <AnimatePresence>
@@ -85,38 +72,44 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
               {/* Theme Selection */}
               <div className="mb-8">
                 <h3 className="text-lg font-semibold mb-4 text-foreground">Theme</h3>
-                <div className="grid grid-cols-4 gap-3">
-                  {themes.map((theme) => (
-                    <motion.button
-                      key={theme.name}
-                      onClick={() => setTheme(theme.name)}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className={cn(
-                        'relative aspect-square rounded-xl transition-all duration-200',
-                        'ring-2 ring-offset-2 ring-offset-background',
-                        currentTheme === theme.name
-                          ? 'ring-primary shadow-lg'
-                          : 'ring-transparent hover:ring-border'
-                      )}
-                      style={{ backgroundColor: themeSwatches[theme.name] }}
-                      title={theme.label}
-                    >
-                      {currentTheme === theme.name && (
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          className="absolute inset-0 flex items-center justify-center"
-                        >
-                          <Check className="w-5 h-5 text-white drop-shadow-md" />
-                        </motion.div>
-                      )}
-                    </motion.button>
-                  ))}
+                <div className="grid grid-cols-2 gap-3">
+                  {themeOptions.map((option) => {
+                    const Icon = option.icon;
+                    const isSelected = currentTheme === option.value;
+                    
+                    return (
+                      <motion.button
+                        key={option.value}
+                        onClick={() => setTheme(option.value)}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className={cn(
+                          'relative p-6 rounded-xl transition-all duration-200 border-2 flex flex-col items-center gap-3',
+                          isSelected
+                            ? 'border-primary bg-primary/10 shadow-lg'
+                            : 'border-border hover:border-primary/50'
+                        )}
+                      >
+                        <div className={cn(
+                          'p-3 rounded-full transition-colors',
+                          isSelected ? 'bg-primary text-primary-foreground' : 'bg-secondary text-foreground'
+                        )}>
+                          <Icon className="w-6 h-6" />
+                        </div>
+                        <span className="font-medium text-foreground">{option.label}</span>
+                        {isSelected && (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            className="absolute top-2 right-2"
+                          >
+                            <Check className="w-5 h-5 text-primary" />
+                          </motion.div>
+                        )}
+                      </motion.button>
+                    );
+                  })}
                 </div>
-                <p className="text-xs text-muted-foreground mt-3 text-center">
-                  {currentThemeInfo.label} theme selected
-                </p>
               </div>
 
               {/* CEFR Info */}

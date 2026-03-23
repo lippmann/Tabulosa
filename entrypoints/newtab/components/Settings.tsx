@@ -1,10 +1,10 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Settings as SettingsIcon, X } from 'lucide-react';
+import { Settings as SettingsIcon, X, Check } from 'lucide-react';
 import { useSettings } from '../hooks/use-settings';
 import { useData } from '../hooks/use-data';
 import { cn } from '../lib/utils';
-import type { CEFRLevel } from '../types';
-import { CEFR_LEVELS } from '../types';
+import type { CEFRLevel, ThemeName } from '../types';
+import { CEFR_LEVELS, THEMES } from '../types';
 
 interface SettingsProps {
   isOpen: boolean;
@@ -21,9 +21,23 @@ const levelColors: Record<CEFRLevel, string> = {
   C2: 'bg-red-500',
 };
 
+// Theme color swatches for preview
+const themeSwatches: Record<ThemeName, string> = {
+  rose: '#e11d48',
+  indigo: '#4f46e5',
+  emerald: '#059669',
+  violet: '#7c3aed',
+  amber: '#d97706',
+  slate: '#475569',
+  ocean: '#0369a1',
+  coral: '#f97316',
+};
+
 export function Settings({ isOpen, onClose }: SettingsProps) {
-  const { settings, updateSettings, resetSettings } = useSettings();
+  const { settings, updateSettings, resetSettings, setTheme } = useSettings();
   const { switchLevel } = useData();
+
+  const themes = Object.values(THEMES);
 
   return (
     <AnimatePresence>
@@ -59,6 +73,43 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                 >
                   <X className="w-5 h-5 text-foreground" />
                 </button>
+              </div>
+
+              {/* Theme Selection */}
+              <div className="mb-8">
+                <h3 className="text-lg font-semibold mb-4 text-foreground">Theme</h3>
+                <div className="grid grid-cols-4 gap-3">
+                  {themes.map((theme) => (
+                    <motion.button
+                      key={theme.name}
+                      onClick={() => setTheme(theme.name)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={cn(
+                        'relative aspect-square rounded-xl transition-all duration-200',
+                        'ring-2 ring-offset-2 ring-offset-background',
+                        settings.theme === theme.name
+                          ? 'ring-primary shadow-lg'
+                          : 'ring-transparent hover:ring-border'
+                      )}
+                      style={{ backgroundColor: themeSwatches[theme.name] }}
+                      title={theme.label}
+                    >
+                      {settings.theme === theme.name && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="absolute inset-0 flex items-center justify-center"
+                        >
+                          <Check className="w-5 h-5 text-white drop-shadow-md" />
+                        </motion.div>
+                      )}
+                    </motion.button>
+                  ))}
+                </div>
+                <p className="text-xs text-muted-foreground mt-3 text-center">
+                  {THEMES[settings.theme].label} theme selected
+                </p>
               </div>
 
               {/* CEFR Info */}

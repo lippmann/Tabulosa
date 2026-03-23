@@ -70,7 +70,7 @@ export function useData() {
   const setLearned = useSetAtom(learnedAtom);
 
   function switchLevel(level: CEFRLevel) {
-    setSettings((prev): { version: string; mode: "ichigoichie" | "random"; levels: CEFRLevels; pronunciation: boolean } => ({
+    setSettings((prev) => ({
       ...prev,
       levels: prev.levels.map((item: { level: CEFRLevel; enabled: boolean }) => 
         item.level === level ? { ...item, enabled: !item.enabled } : item

@@ -5,7 +5,8 @@
   --color-foreground: #18181b;
   --color-card: #ffffff;
   --color-card-foreground: #18181b;
-  --color-primary: #dc2626;
+  /* Primary color will be set dynamically via JS */
+  --color-primary: #e11d48;
   --color-primary-foreground: #fafafa;
   --color-secondary: #f4f4f5;
   --color-secondary-foreground: #18181b;
@@ -17,7 +18,8 @@
   --color-destructive-foreground: #fafafa;
   --color-border: #e4e4e7;
   --color-input: #e4e4e7;
-  --color-ring: #dc2626;
+  /* Ring color will be set dynamically via JS */
+  --color-ring: #e11d48;
   --radius: 0.75rem;
   
   --color-level-1: #22c55e;
@@ -35,6 +37,12 @@ body {
   background-color: var(--color-background);
   color: var(--color-foreground);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Ensure CSS variables can be overridden */
+:root {
+  --color-primary: #e11d48;
+  --color-ring: #e11d48;
 }
 
 @keyframes fade-in {

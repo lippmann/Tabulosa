@@ -1,9 +1,9 @@
 import { motion } from 'motion/react';
-import { Volume2, BookOpen, Check, RotateCcw } from 'lucide-react';
+import { Volume2, MessageSquareQuote, ExternalLink, Check, RotateCcw } from 'lucide-react';
 import { cn } from '../lib/utils';
 import type { Word, CEFRLevel } from '../types';
 import { CEFR_LEVELS } from '../types';
-import { getAudioUrl, getDictionaryUrl } from '../hooks/use-vocab';
+import { speakSpanish, getDictionaryUrl } from '../hooks/use-vocab';
 
 interface WordCardProps {
   word: Word | null;
@@ -58,9 +58,20 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
     );
   }
 
-  const playAudio = () => {
-    const audio = new Audio(getAudioUrl(word.word));
-    audio.play().catch(err => console.error('Failed to play audio:', err));
+  const playAudio = async () => {
+    try {
+      await speakSpanish(word.word);
+    } catch (err) {
+      console.error('Failed to play audio:', err);
+    }
+  };
+
+  const playExample = async () => {
+    try {
+      await speakSpanish(word.example_sentence_native);
+    } catch (err) {
+      console.error('Failed to play example:', err);
+    }
   };
 
   const levelInfo = CEFR_LEVELS[word.cefr_level];
@@ -117,9 +128,17 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
         <button
           onClick={playAudio}
           className="p-3 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors"
-          title="Play pronunciation"
+          title="Pronounce word"
         >
           <Volume2 className="w-5 h-5 text-foreground" />
+        </button>
+        
+        <button
+          onClick={playExample}
+          className="p-3 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors"
+          title="Pronounce example sentence"
+        >
+          <MessageSquareQuote className="w-5 h-5 text-foreground" />
         </button>
         
         <a
@@ -127,9 +146,9 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
           target="_blank"
           rel="noopener noreferrer"
           className="p-3 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors"
-          title="Open dictionary"
+          title="Open SpanishDict"
         >
-          <BookOpen className="w-5 h-5 text-foreground" />
+          <ExternalLink className="w-5 h-5 text-foreground" />
         </a>
         
         <button

@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Settings as SettingsIcon, Book } from 'lucide-react';
 import { motion } from 'motion/react';
 import { WordCard } from './components/WordCard';
 import { Settings } from './components/Settings';
 import { useTheme } from './hooks/use-theme';
-import { useLoadWords } from './hooks/use-vocab';
+import { useLoadWords, preloadVoices } from './hooks/use-vocab';
 import { useRandomWord, useData } from './hooks/use-data';
 import { useSettings, pronunciationAtom } from './hooks/use-settings';
 import { useAtomValue } from 'jotai';
@@ -14,6 +14,15 @@ export default function App() {
   
   useTheme();
   useLoadWords();
+  
+  // Preload TTS voices
+  useEffect(() => {
+    preloadVoices();
+    // Some browsers load voices asynchronously
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = preloadVoices;
+    }
+  }, []);
   
   const { randomWord, next } = useRandomWord();
   const { addLearned } = useData();

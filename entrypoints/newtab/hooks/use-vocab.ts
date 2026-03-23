@@ -22,6 +22,44 @@ export function getDictionaryUrl(word: string) {
   return `https://www.spanishdict.com/translate/${encodeURIComponent(word)}`;
 }
 
-export function getAudioUrl(word: string) {
-  return `https://translate.google.com/translate_tts?ie=UTF-8&tl=es&client=tw-ob&q=${encodeURIComponent(word)}`;
+// Spanish TTS using Web Speech API
+export function speakSpanish(text: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (!('speechSynthesis' in window)) {
+      reject(new Error('Speech synthesis not supported'));
+      return;
+    }
+
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'es-ES'; // Spanish (Spain)
+    utterance.rate = 0.9; // Slightly slower for learning
+    utterance.pitch = 1;
+
+    // Try to find a Spanish voice
+    const voices = window.speechSynthesis.getVoices();
+    const spanishVoice = voices.find(voice => 
+      voice.lang.startsWith('es') && voice.localService
+    ) || voices.find(voice => 
+      voice.lang.startsWith('es')
+    );
+
+    if (spanishVoice) {
+      utterance.voice = spanishVoice;
+    }
+
+    utterance.onend = () => resolve();
+    utterance.onerror = (e) => reject(e);
+
+    window.speechSynthesis.speak(utterance);
+  });
+}
+
+// Preload voices (needed for some browsers)
+export function preloadVoices() {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.getVoices();
+  }
 }

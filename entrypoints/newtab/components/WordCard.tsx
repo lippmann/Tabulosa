@@ -1,7 +1,8 @@
 import { motion } from 'motion/react';
 import { Volume2, BookOpen, Check, RotateCcw } from 'lucide-react';
 import { cn } from '../lib/utils';
-import type { Word } from '../types';
+import type { Word, CEFRLevel } from '../types';
+import { CEFR_LEVELS } from '../types';
 import { getAudioUrl, getDictionaryUrl } from '../hooks/use-vocab';
 
 interface WordCardProps {
@@ -10,6 +11,16 @@ interface WordCardProps {
   onLearn: () => void;
   onNext: () => void;
 }
+
+// CEFR 级别对应的颜色
+const levelColors: Record<CEFRLevel, string> = {
+  A1: 'bg-green-500',
+  A2: 'bg-blue-500',
+  B1: 'bg-yellow-500',
+  B2: 'bg-orange-500',
+  C1: 'bg-purple-500',
+  C2: 'bg-red-500',
+};
 
 export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardProps) {
   if (!word) {
@@ -33,18 +44,12 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
     );
   }
 
-  const levelColors = {
-    1: 'bg-level-1',
-    2: 'bg-level-2',
-    3: 'bg-level-3',
-    4: 'bg-level-4',
-    5: 'bg-level-5',
-  };
-
   const playAudio = () => {
     const audio = new Audio(getAudioUrl(word.word));
     audio.play().catch(err => console.error('Failed to play audio:', err));
   };
+
+  const levelInfo = CEFR_LEVELS[word.level];
 
   return (
     <motion.div
@@ -54,10 +59,10 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
     >
       {/* Level Badge */}
       <div className={cn(
-        'px-4 py-1 rounded-full text-white text-sm font-medium',
+        'px-4 py-1.5 rounded-full text-white text-sm font-medium shadow-md',
         levelColors[word.level]
       )}>
-        Level {word.level}
+        {levelInfo.label}
       </div>
 
       {/* Word */}

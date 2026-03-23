@@ -3,32 +3,27 @@ import { Settings as SettingsIcon, X } from 'lucide-react';
 import { useSettings } from '../hooks/use-settings';
 import { useData } from '../hooks/use-data';
 import { cn } from '../lib/utils';
-import type { Level } from '../types';
+import type { CEFRLevel } from '../types';
+import { CEFR_LEVELS } from '../types';
 
 interface SettingsProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+// CEFR 级别对应的颜色
+const levelColors: Record<CEFRLevel, string> = {
+  A1: 'bg-green-500',
+  A2: 'bg-blue-500',
+  B1: 'bg-yellow-500',
+  B2: 'bg-orange-500',
+  C1: 'bg-purple-500',
+  C2: 'bg-red-500',
+};
+
 export function Settings({ isOpen, onClose }: SettingsProps) {
   const { settings, updateSettings, resetSettings } = useSettings();
   const { switchLevel } = useData();
-
-  const levelLabels: Record<Level, string> = {
-    1: '初级 (Level 1)',
-    2: '中级 (Level 2)',
-    3: '高级 (Level 3)',
-    4: '专业 (Level 4)',
-    5: '精通 (Level 5)',
-  };
-
-  const levelColors = {
-    1: 'bg-level-1',
-    2: 'bg-level-2',
-    3: 'bg-level-3',
-    4: 'bg-level-4',
-    5: 'bg-level-5',
-  };
 
   return (
     <AnimatePresence>
@@ -66,6 +61,14 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                 </button>
               </div>
 
+              {/* CEFR Info */}
+              <div className="mb-8 p-4 bg-muted rounded-lg">
+                <h3 className="text-sm font-semibold mb-2 text-foreground">关于 CEFR</h3>
+                <p className="text-xs text-muted-foreground">
+                  CEFR（欧洲语言共同参考框架）是国际通用的语言能力评估标准，分为 A1-C2 六个等级。
+                </p>
+              </div>
+
               {/* Mode Selection */}
               <div className="mb-8">
                 <h3 className="text-lg font-semibold mb-4 text-foreground">学习模式</h3>
@@ -91,30 +94,45 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                 </div>
               </div>
 
-              {/* Level Selection */}
+              {/* CEFR Level Selection */}
               <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-4 text-foreground">难度级别</h3>
+                <h3 className="text-lg font-semibold mb-4 text-foreground">CEFR 难度级别</h3>
                 <div className="space-y-2">
-                  {settings.levels.map((item) => (
-                    <button
-                      key={item.level}
-                      onClick={() => switchLevel(item.level)}
-                      className={cn(
-                        'w-full p-4 rounded-lg text-left transition-colors border-2 flex items-center gap-3',
-                        item.enabled
-                          ? 'border-primary bg-primary/10'
-                          : 'border-border hover:border-primary/50 opacity-60'
-                      )}
-                    >
-                      <div className={cn(
-                        'w-4 h-4 rounded-full',
-                        levelColors[item.level]
-                      )} />
-                      <span className="font-medium text-foreground">
-                        {levelLabels[item.level]}
-                      </span>
-                    </button>
-                  ))}
+                  {settings.levels.map((item) => {
+                    const levelInfo = CEFR_LEVELS[item.level];
+                    return (
+                      <button
+                        key={item.level}
+                        onClick={() => switchLevel(item.level)}
+                        className={cn(
+                          'w-full p-4 rounded-lg text-left transition-colors border-2',
+                          item.enabled
+                            ? 'border-primary bg-primary/10'
+                            : 'border-border hover:border-primary/50 opacity-60'
+                        )}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={cn(
+                            'w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm',
+                            levelColors[item.level]
+                          )}>
+                            {item.level}
+                          </div>
+                          <div>
+                            <div className="font-medium text-foreground">
+                              {levelInfo.label}
+                            </div>
+                            <div className="text-xs text-muted-foreground mt-0.5">
+                              {levelInfo.description}
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              词汇量：{levelInfo.vocabulary}
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 

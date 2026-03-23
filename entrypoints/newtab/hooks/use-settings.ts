@@ -1,7 +1,7 @@
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 
-import type { Level, Levels, Mode, Settings } from '../types';
+import type { CEFRLevel, CEFRLevels, Mode, Settings } from '../types';
 
 export const KEY = 'spanish-tab-of-words';
 
@@ -9,11 +9,12 @@ const defaultSettings: Settings = {
   version: '1.0.0',
   mode: 'random',
   levels: [
-    { level: 1, enabled: true },
-    { level: 2, enabled: true },
-    { level: 3, enabled: true },
-    { level: 4, enabled: false },
-    { level: 5, enabled: false },
+    { level: 'A1', enabled: true },
+    { level: 'A2', enabled: true },
+    { level: 'B1', enabled: false },
+    { level: 'B2', enabled: false },
+    { level: 'C1', enabled: false },
+    { level: 'C2', enabled: false },
   ],
   pronunciation: true,
 };

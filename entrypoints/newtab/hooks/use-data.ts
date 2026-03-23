@@ -3,13 +3,13 @@ import { atomWithStorage } from 'jotai/utils';
 
 import { KEY, settingsAtom, modeAtom } from './use-settings';
 
-import type { Level, Word, Levels } from '../types';
+import type { CEFRLevel, Word, CEFRLevels } from '../types';
 
 export const wordsAtom = atom<Word[]>([]);
 export const learnedAtom = atomWithStorage<string[]>(`${KEY}-learned`, []);
 export const metAtom = atomWithStorage<string[]>(`${KEY}-met`, []);
 
-export const enabledLevelsAtom = atom<Level[]>(get => {
+export const enabledLevelsAtom = atom<CEFRLevel[]>(get => {
   const settings = get(settingsAtom);
   return settings.levels
     .filter(l => l.enabled)
@@ -69,10 +69,10 @@ export function useData() {
   const setSettings = useSetAtom(settingsAtom);
   const setLearned = useSetAtom(learnedAtom);
 
-  function switchLevel(level: Level) {
-    setSettings((prev): { version: string; mode: "ichigoichie" | "random"; levels: Levels; pronunciation: boolean } => ({
+  function switchLevel(level: CEFRLevel) {
+    setSettings((prev): { version: string; mode: "ichigoichie" | "random"; levels: CEFRLevels; pronunciation: boolean } => ({
       ...prev,
-      levels: prev.levels.map((item: { level: Level; enabled: boolean }) => 
+      levels: prev.levels.map((item: { level: CEFRLevel; enabled: boolean }) => 
         item.level === level ? { ...item, enabled: !item.enabled } : item
       )
     }));

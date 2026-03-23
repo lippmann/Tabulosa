@@ -50,6 +50,9 @@ export default function App() {
           <span className="text-lg font-bold text-foreground">
             Spanish Tab of Words
           </span>
+          <span className="hidden sm:inline text-xs px-2 py-0.5 bg-primary/20 text-primary rounded-full">
+            CEFR
+          </span>
         </div>
         
         <button
@@ -83,7 +86,7 @@ export default function App() {
         animate={{ y: 0, opacity: 1 }}
         className="fixed bottom-0 left-0 right-0 z-30 px-6 py-4 text-center text-sm text-muted-foreground"
       >
-        每次打开新标签页，学习一个西班牙语单词
+        每次打开新标签页，学习一个西班牙语单词 · 基于 CEFR 标准分级
       </motion.footer>
     </div>
   );

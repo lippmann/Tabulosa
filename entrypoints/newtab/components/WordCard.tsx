@@ -208,6 +208,10 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
           onClick={onSave}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
+          animate={{
+            scale: isSaved ? [1, 1.2, 1] : 1,
+          }}
+          transition={{ duration: 0.3 }}
           className={cn(
             "p-4 rounded-xl transition-all shadow-md hover:shadow-lg",
             isSaved 
@@ -216,11 +220,16 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
           )}
           title={isSaved ? "Remove from saved" : "Save word"}
         >
-          {isSaved ? (
-            <BookmarkCheck className="w-6 h-6" />
-          ) : (
-            <Bookmark className="w-6 h-6" />
-          )}
+          <motion.div
+            animate={{ scale: isSaved ? [1, 1.3, 1] : 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            {isSaved ? (
+              <BookmarkCheck className="w-6 h-6" />
+            ) : (
+              <Bookmark className="w-6 h-6" />
+            )}
+          </motion.div>
         </motion.button>
         
         {/* Random Next Button */}

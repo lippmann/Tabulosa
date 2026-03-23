@@ -12,7 +12,7 @@ interface WordCardProps {
   onNext: () => void;
 }
 
-// CEFR 级别对应的颜色
+// CEFR Level Colors
 const levelColors: Record<CEFRLevel, string> = {
   A1: 'bg-green-500',
   A2: 'bg-blue-500',
@@ -20,6 +20,20 @@ const levelColors: Record<CEFRLevel, string> = {
   B2: 'bg-orange-500',
   C1: 'bg-purple-500',
   C2: 'bg-red-500',
+};
+
+// Part of Speech display names
+const posDisplay: Record<string, string> = {
+  noun: 'Noun',
+  verb: 'Verb',
+  adjective: 'Adjective',
+  adverb: 'Adverb',
+  pronoun: 'Pronoun',
+  preposition: 'Preposition',
+  conjunction: 'Conjunction',
+  interjection: 'Interjection',
+  article: 'Article',
+  determiner: 'Determiner',
 };
 
 export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardProps) {
@@ -31,14 +45,14 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
           ¡Felicidades!
         </h2>
         <p className="text-muted-foreground mb-6">
-          你已经学完了所有单词！
+          You've learned all the words!
         </p>
         <button
           onClick={onNext}
           className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2"
         >
           <RotateCcw className="w-4 h-4" />
-          重新开始
+          Start Over
         </button>
       </div>
     );
@@ -49,7 +63,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
     audio.play().catch(err => console.error('Failed to play audio:', err));
   };
 
-  const levelInfo = CEFR_LEVELS[word.level];
+  const levelInfo = CEFR_LEVELS[word.cefr_level];
 
   return (
     <motion.div
@@ -60,7 +74,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
       {/* Level Badge */}
       <div className={cn(
         'px-4 py-1.5 rounded-full text-white text-sm font-medium shadow-md',
-        levelColors[word.level]
+        levelColors[word.cefr_level]
       )}>
         {levelInfo.label}
       </div>
@@ -71,30 +85,31 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
           {word.word}
         </h1>
         
-        {showPronunciation && (
-          <p className="text-xl text-muted-foreground mb-2 animate-slide-in">
-            {word.pronunciation}
-          </p>
-        )}
-        
         <p className="text-3xl text-muted-foreground animate-fade-in">
-          {word.meaning}
+          {word.english_translation}
         </p>
       </div>
 
       {/* Example */}
       <div className="max-w-2xl text-center animate-fade-in">
         <p className="text-lg italic text-foreground mb-2">
-          "{word.example}"
+          "{word.example_sentence_native}"
         </p>
         <p className="text-base text-muted-foreground">
-          {word.exampleTranslation}
+          {word.example_sentence_english}
         </p>
       </div>
 
-      {/* Category */}
-      <div className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm">
-        {word.category}
+      {/* Part of Speech & Frequency */}
+      <div className="flex items-center gap-3">
+        <div className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm">
+          {posDisplay[word.pos] || word.pos}
+        </div>
+        {word.word_frequency && (
+          <div className="px-3 py-1 bg-muted text-muted-foreground rounded-md text-xs">
+            Freq: #{word.word_frequency}
+          </div>
+        )}
       </div>
 
       {/* Actions */}
@@ -102,7 +117,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
         <button
           onClick={playAudio}
           className="p-3 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors"
-          title="播放发音"
+          title="Play pronunciation"
         >
           <Volume2 className="w-5 h-5 text-foreground" />
         </button>
@@ -112,7 +127,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
           target="_blank"
           rel="noopener noreferrer"
           className="p-3 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors"
-          title="查看词典"
+          title="Open dictionary"
         >
           <BookOpen className="w-5 h-5 text-foreground" />
         </a>
@@ -122,14 +137,14 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
           className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2"
         >
           <Check className="w-4 h-4" />
-          已学会
+          Learned
         </button>
         
         <button
           onClick={onNext}
           className="px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors font-medium"
         >
-          下一个
+          Next
         </button>
       </div>
     </motion.div>

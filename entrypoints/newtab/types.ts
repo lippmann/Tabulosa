@@ -1,16 +1,21 @@
-// CEFR (Common European Framework of Reference) 级别
-// A1: 入门级 | A2: 基础级 | B1: 进阶级 | B2: 高阶级 | C1: 流利运用级 | C2: 精通级
+// CEFR (Common European Framework of Reference) Levels
+// A1: Beginner | A2: Elementary | B1: Intermediate | B2: Upper-Intermediate | C1: Advanced | C2: Proficiency
 export type CEFRLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 export type CEFRLevels = Array<{ level: CEFRLevel; enabled: boolean }>;
 
+// Part of Speech types
+export type PartOfSpeech = 'noun' | 'verb' | 'adjective' | 'adverb' | 'pronoun' | 'preposition' | 'conjunction' | 'interjection' | 'article' | 'determiner';
+
+// Word data from JSON
 export interface Word {
   word: string;
-  meaning: string;
-  pronunciation: string;
-  example: string;
-  exampleTranslation: string;
-  level: CEFRLevel;
-  category: string;
+  useful_for_flashcard: boolean;
+  cefr_level: CEFRLevel;
+  english_translation: string;
+  example_sentence_native: string;
+  example_sentence_english: string;
+  pos: string; // Part of Speech
+  word_frequency: number;
 }
 
 export type Mode = 'ichigoichie' | 'random';
@@ -22,36 +27,36 @@ export interface Settings {
   pronunciation: boolean;
 }
 
-// CEFR 级别信息
+// CEFR Level Information
 export const CEFR_LEVELS: Record<CEFRLevel, { label: string; description: string; vocabulary: string }> = {
   A1: {
-    label: '入门级 (A1)',
-    description: '基础日常交流，约900-1000词',
+    label: 'Beginner (A1)',
+    description: 'Basic everyday communication, ~900-1000 words',
     vocabulary: '900-1000'
   },
   A2: {
-    label: '基础级 (A2)',
-    description: '简单日常场景，约2000-3000词',
+    label: 'Elementary (A2)',
+    description: 'Simple daily situations, ~2000-3000 words',
     vocabulary: '2000-3000'
   },
   B1: {
-    label: '进阶级 (B1)',
-    description: '独立沟通表达，约5000-6000词',
+    label: 'Intermediate (B1)',
+    description: 'Independent communication, ~5000-6000 words',
     vocabulary: '5000-6000'
   },
   B2: {
-    label: '高阶级 (B2)',
-    description: '专业领域交流，约7000-8000词',
+    label: 'Upper-Int (B2)',
+    description: 'Professional communication, ~7000-8000 words',
     vocabulary: '7000-8000'
   },
   C1: {
-    label: '流利级 (C1)',
-    description: '接近母语水平，约10000+词',
+    label: 'Advanced (C1)',
+    description: 'Near-native fluency, ~10000+ words',
     vocabulary: '10000+'
   },
   C2: {
-    label: '精通级 (C2)',
-    description: '完全精通，接近母语者',
+    label: 'Proficiency (C2)',
+    description: 'Full mastery, native-like',
     vocabulary: '15000+'
   }
 };

@@ -58,7 +58,7 @@ export default function App() {
         <button
           onClick={() => setShowSettings(true)}
           className="p-2 hover:bg-secondary rounded-lg transition-colors"
-          title="打开设置"
+          title="Open settings"
         >
           <SettingsIcon className="w-6 h-6 text-foreground" />
         </button>
@@ -86,7 +86,7 @@ export default function App() {
         animate={{ y: 0, opacity: 1 }}
         className="fixed bottom-0 left-0 right-0 z-30 px-6 py-4 text-center text-sm text-muted-foreground"
       >
-        每次打开新标签页，学习一个西班牙语单词 · 基于 CEFR 标准分级
+        Learn a Spanish word every time you open a new tab · CEFR-based levels
       </motion.footer>
     </div>
   );

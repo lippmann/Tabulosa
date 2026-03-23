@@ -24,7 +24,7 @@ export const restOfWordsAtom = atom<Word[]>(get => {
   const enabledLevels = get(enabledLevelsAtom);
 
   return words.filter(word => {
-    if (!enabledLevels.includes(word.level))
+    if (!enabledLevels.includes(word.cefr_level))
       return false;
 
     if (mode === 'ichigoichie')

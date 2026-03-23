@@ -11,7 +11,7 @@ interface SettingsProps {
   onClose: () => void;
 }
 
-// CEFR 级别对应的颜色
+// CEFR Level Colors
 const levelColors: Record<CEFRLevel, string> = {
   A1: 'bg-green-500',
   A2: 'bg-blue-500',
@@ -51,7 +51,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
                   <SettingsIcon className="w-6 h-6 text-primary" />
-                  <h2 className="text-2xl font-bold text-foreground">设置</h2>
+                  <h2 className="text-2xl font-bold text-foreground">Settings</h2>
                 </div>
                 <button
                   onClick={onClose}
@@ -63,19 +63,19 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
 
               {/* CEFR Info */}
               <div className="mb-8 p-4 bg-muted rounded-lg">
-                <h3 className="text-sm font-semibold mb-2 text-foreground">关于 CEFR</h3>
+                <h3 className="text-sm font-semibold mb-2 text-foreground">About CEFR</h3>
                 <p className="text-xs text-muted-foreground">
-                  CEFR（欧洲语言共同参考框架）是国际通用的语言能力评估标准，分为 A1-C2 六个等级。
+                  The Common European Framework of Reference (CEFR) is an international standard for language proficiency, divided into six levels from A1 to C2.
                 </p>
               </div>
 
               {/* Mode Selection */}
               <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-4 text-foreground">学习模式</h3>
+                <h3 className="text-lg font-semibold mb-4 text-foreground">Learning Mode</h3>
                 <div className="space-y-2">
                   {[
-                    { value: 'random', label: '随机模式', desc: '随机显示单词，可重复学习' },
-                    { value: 'ichigoichie', label: '一期一会', desc: '每个单词只出现一次' },
+                    { value: 'random', label: 'Random Mode', desc: 'Show words randomly, repeatable' },
+                    { value: 'ichigoichie', label: 'Ichigo Ichie', desc: 'Each word appears only once' },
                   ].map((mode) => (
                     <button
                       key={mode.value}
@@ -96,7 +96,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
 
               {/* CEFR Level Selection */}
               <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-4 text-foreground">CEFR 难度级别</h3>
+                <h3 className="text-lg font-semibold mb-4 text-foreground">CEFR Difficulty Levels</h3>
                 <div className="space-y-2">
                   {settings.levels.map((item) => {
                     const levelInfo = CEFR_LEVELS[item.level];
@@ -126,7 +126,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                               {levelInfo.description}
                             </div>
                             <div className="text-xs text-muted-foreground">
-                              词汇量：{levelInfo.vocabulary}
+                              Vocabulary: {levelInfo.vocabulary}
                             </div>
                           </div>
                         </div>
@@ -138,7 +138,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
 
               {/* Pronunciation Toggle */}
               <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-4 text-foreground">显示选项</h3>
+                <h3 className="text-lg font-semibold mb-4 text-foreground">Display Options</h3>
                 <button
                   onClick={() => updateSettings({ pronunciation: !settings.pronunciation })}
                   className={cn(
@@ -148,9 +148,9 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                       : 'border-border hover:border-primary/50 opacity-60'
                   )}
                 >
-                  <div className="font-medium text-foreground">显示音标</div>
+                  <div className="font-medium text-foreground">Show Pronunciation</div>
                   <div className="text-sm text-muted-foreground mt-1">
-                    在单词下方显示国际音标
+                    Display IPA phonetics below words
                   </div>
                 </button>
               </div>
@@ -160,7 +160,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                 onClick={resetSettings}
                 className="w-full p-4 bg-destructive text-destructive-foreground rounded-lg hover:bg-destructive/90 transition-colors font-medium"
               >
-                重置所有设置
+                Reset All Settings
               </button>
             </div>
           </motion.div>

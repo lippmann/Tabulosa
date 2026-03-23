@@ -3,6 +3,9 @@ import { useAtomValue } from 'jotai';
 import { themeAtom } from './use-settings';
 import { THEMES } from '../types';
 
+// Default theme for fallback
+const DEFAULT_THEME = 'rose';
+
 export function useTheme() {
   const theme = useAtomValue(themeAtom);
 
@@ -12,7 +15,8 @@ export function useTheme() {
     document.documentElement.classList.add('light');
     
     // Apply theme colors as CSS variables
-    const themeColors = THEMES[theme];
+    const themeName = theme || DEFAULT_THEME;
+    const themeColors = THEMES[themeName];
     if (themeColors) {
       // Set both formats for Tailwind compatibility
       document.documentElement.style.setProperty('--color-primary', themeColors.primary);
@@ -22,6 +26,7 @@ export function useTheme() {
 }
 
 // Get current theme primary color (useful for inline styles)
-export function getThemePrimaryColor(theme: string): string {
-  return THEMES[theme as keyof typeof THEMES]?.primary || '#e11d48';
+export function getThemePrimaryColor(theme: string | undefined): string {
+  const themeName = theme || DEFAULT_THEME;
+  return THEMES[themeName as keyof typeof THEMES]?.primary || '#e11d48';
 }

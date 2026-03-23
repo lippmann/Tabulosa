@@ -33,11 +33,18 @@ const themeSwatches: Record<ThemeName, string> = {
   coral: '#f97316',
 };
 
+// Default theme for fallback
+const DEFAULT_THEME: ThemeName = 'rose';
+
 export function Settings({ isOpen, onClose }: SettingsProps) {
   const { settings, updateSettings, resetSettings, setTheme } = useSettings();
   const { switchLevel } = useData();
 
   const themes = Object.values(THEMES);
+  
+  // Get current theme with fallback
+  const currentTheme = settings.theme || DEFAULT_THEME;
+  const currentThemeInfo = THEMES[currentTheme] || THEMES.rose;
 
   return (
     <AnimatePresence>
@@ -88,14 +95,14 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                       className={cn(
                         'relative aspect-square rounded-xl transition-all duration-200',
                         'ring-2 ring-offset-2 ring-offset-background',
-                        settings.theme === theme.name
+                        currentTheme === theme.name
                           ? 'ring-primary shadow-lg'
                           : 'ring-transparent hover:ring-border'
                       )}
                       style={{ backgroundColor: themeSwatches[theme.name] }}
                       title={theme.label}
                     >
-                      {settings.theme === theme.name && (
+                      {currentTheme === theme.name && (
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
@@ -108,7 +115,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                   ))}
                 </div>
                 <p className="text-xs text-muted-foreground mt-3 text-center">
-                  {THEMES[settings.theme].label} theme selected
+                  {currentThemeInfo.label} theme selected
                 </p>
               </div>
 

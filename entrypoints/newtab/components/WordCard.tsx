@@ -76,7 +76,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
           onClick={onNext}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="p-4 bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition-all"
+          className="p-4 bg-secondary rounded-xl text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all shadow-md hover:shadow-lg"
           title="Start over"
         >
           <Shuffle className="w-6 h-6" />
@@ -206,7 +206,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
           onClick={onLearn}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="p-4 bg-primary text-primary-foreground rounded-xl shadow-lg hover:shadow-xl transition-all"
+          className="p-4 bg-secondary rounded-xl text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all shadow-md hover:shadow-lg"
           title="Mark as learned"
         >
           <Bookmark className="w-6 h-6" />

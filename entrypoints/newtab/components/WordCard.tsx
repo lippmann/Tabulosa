@@ -36,24 +36,92 @@ const posDisplay: Record<string, string> = {
   determiner: 'Determiner',
 };
 
+// Icon button component with hover effects
+interface IconButtonProps {
+  onClick?: () => void;
+  children: React.ReactNode;
+  title: string;
+  href?: string;
+}
+
+const IconButton = ({ onClick, children, title, href }: IconButtonProps) => {
+  const buttonContent = (
+    <motion.div
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.95 }}
+      className="p-3 bg-secondary rounded-lg cursor-pointer group relative overflow-hidden"
+      title={title}
+    >
+      {/* Glow effect on hover */}
+      <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300" />
+      
+      {/* Icon with animation */}
+      <motion.div
+        className="relative z-10"
+        whileHover={{ rotate: [0, -10, 10, -10, 0] }}
+        transition={{ duration: 0.5 }}
+      >
+        {children}
+      </motion.div>
+      
+      {/* Ripple effect background */}
+      <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5" />
+    </motion.div>
+  );
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block"
+      >
+        {buttonContent}
+      </a>
+    );
+  }
+
+  return (
+    <button onClick={onClick} className="block">
+      {buttonContent}
+    </button>
+  );
+};
+
 export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardProps) {
   if (!word) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] text-center animate-fade-in">
-        <div className="text-6xl mb-4">🎉</div>
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 200 }}
+          className="text-6xl mb-4"
+        >
+          🎉
+        </motion.div>
         <h2 className="text-2xl font-bold mb-2 text-foreground">
           ¡Felicidades!
         </h2>
         <p className="text-muted-foreground mb-6">
           You've learned all the words!
         </p>
-        <button
+        <motion.button
           onClick={onNext}
-          className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transition-shadow"
         >
-          <RotateCcw className="w-4 h-4" />
+          <motion.div
+            initial={{ rotate: 0 }}
+            whileHover={{ rotate: -360 }}
+            transition={{ duration: 0.5 }}
+          >
+            <RotateCcw className="w-4 h-4" />
+          </motion.div>
           Start Over
-        </button>
+        </motion.button>
       </div>
     );
   }
@@ -83,36 +151,62 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
       className="flex flex-col items-center justify-center gap-8"
     >
       {/* Level Badge */}
-      <div className={cn(
-        'px-4 py-1.5 rounded-full text-white text-sm font-medium shadow-md',
-        levelColors[word.cefr_level]
-      )}>
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.1 }}
+        whileHover={{ scale: 1.05 }}
+        className={cn(
+          'px-4 py-1.5 rounded-full text-white text-sm font-medium shadow-md cursor-default',
+          levelColors[word.cefr_level]
+        )}
+      >
         {levelInfo.label}
-      </div>
+      </motion.div>
 
       {/* Word */}
       <div className="text-center">
-        <h1 className="text-6xl md:text-7xl font-bold text-foreground mb-4 animate-fade-in">
+        <motion.h1
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.15 }}
+          className="text-6xl md:text-7xl font-bold text-foreground mb-4"
+        >
           {word.word}
-        </h1>
+        </motion.h1>
         
-        <p className="text-3xl text-muted-foreground animate-fade-in">
+        <motion.p
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-3xl text-muted-foreground"
+        >
           {word.english_translation}
-        </p>
+        </motion.p>
       </div>
 
       {/* Example */}
-      <div className="max-w-2xl text-center animate-fade-in">
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.25 }}
+        className="max-w-2xl text-center"
+      >
         <p className="text-lg italic text-foreground mb-2">
           "{word.example_sentence_native}"
         </p>
         <p className="text-base text-muted-foreground">
           {word.example_sentence_english}
         </p>
-      </div>
+      </motion.div>
 
       {/* Part of Speech & Frequency */}
-      <div className="flex items-center gap-3">
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="flex items-center gap-3"
+      >
         <div className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm">
           {posDisplay[word.pos] || word.pos}
         </div>
@@ -121,51 +215,72 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
             Freq: #{word.word_frequency}
           </div>
         )}
-      </div>
+      </motion.div>
 
       {/* Actions */}
-      <div className="flex items-center gap-3 mt-4">
-        <button
-          onClick={playAudio}
-          className="p-3 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors"
-          title="Pronounce word"
-        >
-          <Volume2 className="w-5 h-5 text-foreground" />
-        </button>
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.35 }}
+        className="flex items-center gap-3 mt-4"
+      >
+        {/* Pronounce Word Button */}
+        <IconButton onClick={playAudio} title="Pronounce word">
+          <Volume2 className="w-5 h-5 text-foreground group-hover:text-primary transition-colors" />
+        </IconButton>
         
-        <button
-          onClick={playExample}
-          className="p-3 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors"
-          title="Pronounce example sentence"
-        >
-          <MessageSquareQuote className="w-5 h-5 text-foreground" />
-        </button>
+        {/* Pronounce Example Button */}
+        <IconButton onClick={playExample} title="Pronounce example sentence">
+          <MessageSquareQuote className="w-5 h-5 text-foreground group-hover:text-primary transition-colors" />
+        </IconButton>
         
-        <a
-          href={getDictionaryUrl(word.word)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="p-3 bg-secondary hover:bg-secondary/80 rounded-lg transition-colors"
-          title="Open SpanishDict"
-        >
-          <ExternalLink className="w-5 h-5 text-foreground" />
-        </a>
+        {/* Dictionary Link */}
+        <IconButton href={getDictionaryUrl(word.word)} title="Open SpanishDict">
+          <ExternalLink className="w-5 h-5 text-foreground group-hover:text-primary transition-colors" />
+        </IconButton>
         
-        <button
+        {/* Learned Button */}
+        <motion.button
           onClick={onLearn}
-          className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium flex items-center gap-2 shadow-lg hover:shadow-xl transition-shadow relative overflow-hidden group"
         >
-          <Check className="w-4 h-4" />
-          Learned
-        </button>
+          <div className="absolute inset-0 bg-white/0 group-hover:bg-white/10 transition-colors" />
+          <motion.div
+            initial={{ scale: 1 }}
+            whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0] }}
+            transition={{ duration: 0.3 }}
+          >
+            <Check className="w-4 h-4 relative z-10" />
+          </motion.div>
+          <span className="relative z-10">Learned</span>
+        </motion.button>
         
-        <button
+        {/* Next Button */}
+        <motion.button
           onClick={onNext}
-          className="px-6 py-3 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors font-medium"
+          whileHover={{ scale: 1.05, x: 3 }}
+          whileTap={{ scale: 0.95 }}
+          className="px-6 py-3 bg-secondary text-secondary-foreground rounded-lg font-medium shadow-md hover:shadow-lg transition-shadow group"
         >
-          Next
-        </button>
-      </div>
+          <motion.span
+            initial={{ x: 0 }}
+            whileHover={{ x: 3 }}
+            transition={{ duration: 0.2 }}
+            className="inline-flex items-center gap-1"
+          >
+            Next
+            <motion.span
+              className="inline-block"
+              initial={{ x: 0 }}
+              whileHover={{ x: 3 }}
+            >
+              →
+            </motion.span>
+          </motion.span>
+        </motion.button>
+      </motion.div>
     </motion.div>
   );
 }

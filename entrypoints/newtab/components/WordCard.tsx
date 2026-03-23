@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Volume2, MessageSquareQuote, ExternalLink, Check, RotateCcw } from 'lucide-react';
+import { Volume2, ExternalLink, Check, RotateCcw } from 'lucide-react';
 import { cn } from '../lib/utils';
 import type { Word, CEFRLevel } from '../types';
 import { CEFR_LEVELS } from '../types';
@@ -36,58 +36,23 @@ const posDisplay: Record<string, string> = {
   determiner: 'Determiner',
 };
 
-// Icon button component with hover effects
-interface IconButtonProps {
-  onClick?: () => void;
-  children: React.ReactNode;
-  title: string;
-  href?: string;
-}
-
-const IconButton = ({ onClick, children, title, href }: IconButtonProps) => {
-  const buttonContent = (
+// Small audio button for inline use
+const AudioButton = ({ onClick, title }: { onClick: () => void; title: string }) => (
+  <motion.button
+    onClick={onClick}
+    whileHover={{ scale: 1.15 }}
+    whileTap={{ scale: 0.9 }}
+    title={title}
+    className="p-2 rounded-full bg-secondary/50 hover:bg-secondary text-muted-foreground hover:text-primary transition-all duration-200 group"
+  >
     <motion.div
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
-      className="p-3 bg-secondary rounded-lg cursor-pointer group relative overflow-hidden"
-      title={title}
+      whileHover={{ rotate: [0, -15, 15, 0] }}
+      transition={{ duration: 0.4 }}
     >
-      {/* Glow effect on hover */}
-      <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/10 transition-colors duration-300" />
-      
-      {/* Icon with animation */}
-      <motion.div
-        className="relative z-10"
-        whileHover={{ rotate: [0, -10, 10, -10, 0] }}
-        transition={{ duration: 0.5 }}
-      >
-        {children}
-      </motion.div>
-      
-      {/* Ripple effect background */}
-      <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5" />
+      <Volume2 className="w-5 h-5 md:w-6 md:h-6" />
     </motion.div>
-  );
-
-  if (href) {
-    return (
-      <a
-        href={href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block"
-      >
-        {buttonContent}
-      </a>
-    );
-  }
-
-  return (
-    <button onClick={onClick} className="block">
-      {buttonContent}
-    </button>
-  );
-};
+  </motion.button>
+);
 
 export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardProps) {
   if (!word) {
@@ -126,7 +91,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
     );
   }
 
-  const playAudio = async () => {
+  const playWord = async () => {
     try {
       await speakSpanish(word.word);
     } catch (err) {
@@ -164,37 +129,42 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
         {levelInfo.label}
       </motion.div>
 
-      {/* Word */}
-      <div className="text-center">
-        <motion.h1
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.15 }}
-          className="text-6xl md:text-7xl font-bold text-foreground mb-4"
-        >
+      {/* Word with Audio Button */}
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.15 }}
+        className="flex items-center justify-center gap-3"
+      >
+        <h1 className="text-6xl md:text-7xl font-bold text-foreground">
           {word.word}
-        </motion.h1>
-        
-        <motion.p
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-3xl text-muted-foreground"
-        >
-          {word.english_translation}
-        </motion.p>
-      </div>
+        </h1>
+        <AudioButton onClick={playWord} title="Pronounce word" />
+      </motion.div>
+      
+      {/* Translation */}
+      <motion.p
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        className="text-3xl text-muted-foreground"
+      >
+        {word.english_translation}
+      </motion.p>
 
-      {/* Example */}
+      {/* Example with Audio Button */}
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.25 }}
         className="max-w-2xl text-center"
       >
-        <p className="text-lg italic text-foreground mb-2">
-          "{word.example_sentence_native}"
-        </p>
+        <div className="flex items-start justify-center gap-2 mb-2">
+          <p className="text-lg italic text-foreground">
+            "{word.example_sentence_native}"
+          </p>
+          <AudioButton onClick={playExample} title="Pronounce example" />
+        </div>
         <p className="text-base text-muted-foreground">
           {word.example_sentence_english}
         </p>
@@ -224,20 +194,18 @@ export function WordCard({ word, showPronunciation, onLearn, onNext }: WordCardP
         transition={{ delay: 0.35 }}
         className="flex items-center gap-3 mt-4"
       >
-        {/* Pronounce Word Button */}
-        <IconButton onClick={playAudio} title="Pronounce word">
-          <Volume2 className="w-5 h-5 text-foreground group-hover:text-primary transition-colors" />
-        </IconButton>
-        
-        {/* Pronounce Example Button */}
-        <IconButton onClick={playExample} title="Pronounce example sentence">
-          <MessageSquareQuote className="w-5 h-5 text-foreground group-hover:text-primary transition-colors" />
-        </IconButton>
-        
         {/* Dictionary Link */}
-        <IconButton href={getDictionaryUrl(word.word)} title="Open SpanishDict">
-          <ExternalLink className="w-5 h-5 text-foreground group-hover:text-primary transition-colors" />
-        </IconButton>
+        <motion.a
+          href={getDictionaryUrl(word.word)}
+          target="_blank"
+          rel="noopener noreferrer"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="p-3 bg-secondary rounded-lg text-muted-foreground hover:text-primary transition-colors shadow-md hover:shadow-lg"
+          title="Open SpanishDict"
+        >
+          <ExternalLink className="w-5 h-5" />
+        </motion.a>
         
         {/* Learned Button */}
         <motion.button

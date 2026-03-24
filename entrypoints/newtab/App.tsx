@@ -66,10 +66,7 @@ export default function App() {
         <div className="flex items-center gap-2">
           <Book className="w-6 h-6 text-primary" />
           <span className="text-lg font-bold text-foreground">
-            Spanish Tab of Words
-          </span>
-          <span className="hidden sm:inline text-xs px-2 py-0.5 bg-primary/20 text-primary rounded-full">
-            CEFR
+            Tabulosa
           </span>
         </div>
         

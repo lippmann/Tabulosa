@@ -65,15 +65,21 @@ export const savedWordsAtom = atom<Word[]>(get => {
 
 export function useRandomWord() {
   const rest = useAtomValue(restOfWordsAtom);
+  const words = useAtomValue(wordsAtom);
   const mode = useAtomValue(modeAtom);
-  const language = useAtomValue(languageAtom);
   const setMet = useSetAtom(metAtom);
   const [currentWord, setCurrentWord] = useState<Word | null>(null);
+  const [firstWord, setFirstWord] = useState<string>('');
 
-  // 当语言切换时重置当前单词
+  // 当单词数据变化时重置当前单词（检测第一个单词是否变化）
   useEffect(() => {
-    setCurrentWord(null);
-  }, [language]);
+    const newFirstWord = words.length > 0 ? words[0].word : '';
+    // 如果之前有数据，且第一个单词变了，说明语言切换了
+    if (firstWord && newFirstWord && firstWord !== newFirstWord) {
+      setCurrentWord(null);
+    }
+    setFirstWord(newFirstWord);
+  }, [words.length > 0 ? words[0].word : '']);
 
   // 初始化时选择一个随机单词
   useEffect(() => {

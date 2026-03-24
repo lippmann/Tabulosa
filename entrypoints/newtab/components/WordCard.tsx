@@ -7,9 +7,9 @@ import { speakSpanish, getDictionaryUrl } from '../hooks/use-vocab';
 
 // Tooltip wrapper component
 const Tooltip = ({ children, label }: { children: React.ReactNode; label: string }) => (
-  <div className="relative group">
+  <div className="relative group inline-flex">
     {children}
-    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-foreground text-background text-sm font-medium rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap shadow-lg z-10">
+    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-foreground text-background text-sm font-medium rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap shadow-lg z-10 pointer-events-none">
       {label}
       <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-foreground" />
     </div>

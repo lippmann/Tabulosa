@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Settings as SettingsIcon, X, Check, Sun, Moon, Trash2, Volume2, Bookmark } from 'lucide-react';
+import { Settings as SettingsIcon, X, Check, Sun, Moon, Trash2, Volume2, Bookmark, Download } from 'lucide-react';
 import { useAtomValue } from 'jotai';
+import * as XLSX from 'xlsx';
 import { useSettings } from '../hooks/use-settings';
 import { useData, savedWordsAtom } from '../hooks/use-data';
 import { cn } from '../lib/utils';
@@ -45,6 +46,43 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
     }
   };
 
+  const handleExportExcel = () => {
+    if (savedWords.length === 0) return;
+
+    // 准备导出数据
+    const exportData = savedWords.map((word, index) => ({
+      'No.': index + 1,
+      'Word': word.word,
+      'Translation': word.english_translation,
+      'CEFR Level': word.cefr_level,
+      'Part of Speech': word.pos,
+      'Example (Spanish)': word.example_sentence_native,
+      'Example (English)': word.example_sentence_english,
+      'Frequency': word.word_frequency,
+    }));
+
+    // 创建工作簿和工作表
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet(exportData);
+
+    // 设置列宽
+    ws['!cols'] = [
+      { wch: 5 },   // No.
+      { wch: 20 },  // Word
+      { wch: 30 },  // Translation
+      { wch: 12 },  // CEFR Level
+      { wch: 15 },  // Part of Speech
+      { wch: 50 },  // Example (Spanish)
+      { wch: 50 },  // Example (English)
+      { wch: 10 },  // Frequency
+    ];
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Saved Words');
+
+    // 下载文件
+    XLSX.writeFile(wb, `spanish-saved-words-${new Date().toISOString().split('T')[0]}.xlsx`);
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -83,16 +121,29 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
 
               {/* Saved Words Section */}
               <div className="mb-8">
-                <div className="flex items-center gap-2 mb-4">
-                  <Bookmark className="w-5 h-5 text-primary" />
-                  <h3 className="text-lg font-semibold text-foreground">
-                    Saved Words
-                    {savedWords.length > 0 && (
-                      <span className="ml-2 text-sm font-normal text-muted-foreground">
-                        ({savedWords.length})
-                      </span>
-                    )}
-                  </h3>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <Bookmark className="w-5 h-5 text-primary" />
+                    <h3 className="text-lg font-semibold text-foreground">
+                      Saved Words
+                      {savedWords.length > 0 && (
+                        <span className="ml-2 text-sm font-normal text-muted-foreground">
+                          ({savedWords.length})
+                        </span>
+                      )}
+                    </h3>
+                  </div>
+                  {savedWords.length > 0 && (
+                    <motion.button
+                      onClick={handleExportExcel}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex items-center gap-2 px-3 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
+                    >
+                      <Download className="w-4 h-4" />
+                      Export Excel
+                    </motion.button>
+                  )}
                 </div>
                 
                 {savedWords.length === 0 ? (

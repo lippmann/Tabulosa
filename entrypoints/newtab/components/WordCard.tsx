@@ -216,12 +216,11 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
           {posDisplay[word.pos] || word.pos}
         </div>
         {word.word_frequency && (
-          <div 
-            className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm"
-            title="The smaller the number, the more commonly used the word"
-          >
-            Freq: {word.word_frequency}
-          </div>
+          <Tooltip label="The smaller the number, the more commonly used">
+            <div className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm">
+              Freq: {word.word_frequency}
+            </div>
+          </Tooltip>
         )}
       </motion.div>
 

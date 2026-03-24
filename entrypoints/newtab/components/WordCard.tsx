@@ -5,6 +5,17 @@ import type { Word, CEFRLevel } from '../types';
 import { CEFR_LEVELS } from '../types';
 import { speakSpanish, getDictionaryUrl } from '../hooks/use-vocab';
 
+// Tooltip wrapper component
+const Tooltip = ({ children, label }: { children: React.ReactNode; label: string }) => (
+  <div className="relative group">
+    {children}
+    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-foreground text-background text-sm font-medium rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap shadow-lg z-10">
+      {label}
+      <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-foreground" />
+    </div>
+  </div>
+);
+
 interface WordCardProps {
   word: Word | null;
   showPronunciation: boolean;
@@ -222,45 +233,48 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
         className="flex items-center gap-4 mt-6"
       >
         {/* Dictionary Link - Search */}
-        <motion.a
-          href={getDictionaryUrl(word.word)}
-          target="_blank"
-          rel="noopener noreferrer"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          className="p-4 bg-secondary rounded-xl text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all shadow-md hover:shadow-lg"
-          title="Look up in dictionary"
-        >
-          <Search className="w-6 h-6" />
-        </motion.a>
+        <Tooltip label="Look up in dictionary">
+          <motion.a
+            href={getDictionaryUrl(word.word)}
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className="p-4 bg-secondary rounded-xl text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all shadow-md hover:shadow-lg"
+          >
+            <Search className="w-6 h-6" />
+          </motion.a>
+        </Tooltip>
         
         {/* Save Button */}
-        <motion.button
-          onClick={onSave}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          className={cn(
-            "p-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg",
-            "bg-secondary",
-            isSaved 
-              ? "text-primary" 
-              : "text-muted-foreground hover:text-primary hover:bg-secondary/80"
-          )}
-          title={isSaved ? "Remove from saved" : "Save word"}
-        >
-          <AnimatedBookmark isSaved={isSaved} />
-        </motion.button>
+        <Tooltip label={isSaved ? "Remove from saved" : "Save word"}>
+          <motion.button
+            onClick={onSave}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className={cn(
+              "p-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg",
+              "bg-secondary",
+              isSaved 
+                ? "text-primary" 
+                : "text-muted-foreground hover:text-primary hover:bg-secondary/80"
+            )}
+          >
+            <AnimatedBookmark isSaved={isSaved} />
+          </motion.button>
+        </Tooltip>
         
         {/* Random Next Button */}
-        <motion.button
-          onClick={onNext}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          className="p-4 bg-secondary rounded-xl text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all shadow-md hover:shadow-lg"
-          title="Next random word"
-        >
-          <Shuffle className="w-6 h-6" />
-        </motion.button>
+        <Tooltip label="Next word">
+          <motion.button
+            onClick={onNext}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            className="p-4 bg-secondary rounded-xl text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all shadow-md hover:shadow-lg"
+          >
+            <Shuffle className="w-6 h-6" />
+          </motion.button>
+        </Tooltip>
       </motion.div>
     </motion.div>
   );

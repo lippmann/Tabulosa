@@ -1,15 +1,26 @@
 <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background circle -->
-  <circle cx="64" cy="64" r="56" fill="#3B82F6"/>
+  <!-- Browser Tab Shape -->
+  <path 
+    d="M24 48C24 42.4772 28.4772 38 34 38H48V32C48 26.4772 52.4772 22 58 22H70C75.5228 22 80 26.4772 80 32V38H94C99.5228 38 104 42.4772 104 48V96C104 101.523 99.5228 106 94 106H34C28.4772 106 24 101.523 24 96V48Z" 
+    stroke="#E91E63" 
+    stroke-width="6" 
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
   
-  <!-- Tab shape outline -->
-  <rect x="28" y="36" width="72" height="56" rx="6" fill="white" fill-opacity="0.15" stroke="white" stroke-width="3"/>
+  <!-- Tab indicator line -->
+  <line x1="48" y1="38" x2="48" y2="22" stroke="#E91E63" stroke-width="6" stroke-linecap="round"/>
+  <line x1="80" y1="38" x2="80" y2="22" stroke="#E91E63" stroke-width="6" stroke-linecap="round"/>
   
-  <!-- Tab indicators -->
-  <rect x="28" y="36" width="20" height="14" rx="3" fill="white" fill-opacity="0.9"/>
-  <rect x="52" y="36" width="20" height="14" rx="3" fill="white" fill-opacity="0.4"/>
-  
-  <!-- Language symbols: A and 文 -->
-  <text x="42" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="30" font-weight="600" fill="white">A</text>
-  <text x="66" y="80" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="white" fill-opacity="0.8">文</text>
+  <!-- Letter A for Language -->
+  <text 
+    x="64" 
+    y="82" 
+    font-family="system-ui, -apple-system, sans-serif" 
+    font-size="42" 
+    font-weight="600" 
+    fill="#E91E63" 
+    text-anchor="middle"
+  >A</text>
 </svg>

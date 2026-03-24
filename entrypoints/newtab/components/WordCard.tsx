@@ -206,8 +206,8 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
         </div>
         {word.word_frequency && (
           <div 
-            className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm cursor-help"
-            title="The smaller the number, the higher the word frequency"
+            className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm"
+            title="The smaller the number, the more commonly used the word"
           >
             Freq: {word.word_frequency}
           </div>

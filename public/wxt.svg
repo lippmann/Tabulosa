@@ -1,7 +1,26 @@
 <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Document/Book shape with notch (open corner) -->
-  <rect x="16" y="16" width="96" height="96" rx="12" stroke="#D4736A" stroke-width="8" fill="none"/>
-  <!-- Inner notch lines -->
-  <line x1="16" y1="48" x2="48" y2="48" stroke="#D4736A" stroke-width="8"/>
-  <line x1="48" y1="16" x2="48" y2="48" stroke="#D4736A" stroke-width="8"/>
+  <!-- Folder shape with top-left notch -->
+  <path 
+    d="M14 38C14 34.134 17.134 31 21 31H42L50 23H72L80 31H107C110.866 31 114 34.134 114 38V106C114 109.866 110.866 113 107 113H21C17.134 113 14 109.866 14 106V38Z" 
+    fill="#D83A30"
+  />
+  
+  <!-- Letter Ñ in white -->
+  <g fill="#FFFFFF">
+    <!-- Left vertical bar -->
+    <rect x="38" y="52" width="10" height="38"/>
+    <!-- Right vertical bar -->
+    <rect x="80" y="52" width="10" height="38"/>
+    <!-- Diagonal bar (from top-right to bottom-left) -->
+    <polygon points="80,52 90,52 48,90 38,90"/>
+  </g>
+  
+  <!-- Tilde ~ above N -->
+  <path 
+    d="M46 46Q54 40 62 46Q70 52 82 44" 
+    stroke="#FFFFFF" 
+    stroke-width="5" 
+    stroke-linecap="round"
+    fill="none"
+  />
 </svg>

@@ -66,8 +66,14 @@ export const savedWordsAtom = atom<Word[]>(get => {
 export function useRandomWord() {
   const rest = useAtomValue(restOfWordsAtom);
   const mode = useAtomValue(modeAtom);
+  const language = useAtomValue(languageAtom);
   const setMet = useSetAtom(metAtom);
   const [currentWord, setCurrentWord] = useState<Word | null>(null);
+
+  // 当语言切换时重置当前单词
+  useEffect(() => {
+    setCurrentWord(null);
+  }, [language]);
 
   // 初始化时选择一个随机单词
   useEffect(() => {

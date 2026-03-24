@@ -1,7 +1,7 @@
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 
-import type { CEFRLevel, CEFRLevels, Mode, Settings, ThemeMode, Language } from '../types';
+import type { CEFRLevel, CEFRLevels, Mode, Settings, ThemeMode, Language, JLPTLevel, JLPTLevels } from '../types';
 
 export const KEY = 'tabulosa';
 
@@ -17,6 +17,13 @@ const defaultSettings: Settings = {
     { level: 'C1', enabled: true },
     { level: 'C2', enabled: true },
   ],
+  jlptLevels: [
+    { level: 'N5', enabled: true },
+    { level: 'N4', enabled: true },
+    { level: 'N3', enabled: true },
+    { level: 'N2', enabled: true },
+    { level: 'N1', enabled: true },
+  ],
   pronunciation: true,
   theme: 'light',
 };
@@ -25,6 +32,7 @@ export const settingsAtom = atomWithStorage<Settings>(KEY, defaultSettings);
 export const modeAtom = atom(get => get(settingsAtom).mode);
 export const languageAtom = atom(get => get(settingsAtom).language);
 export const levelsAtom = atom(get => get(settingsAtom).levels);
+export const jlptLevelsAtom = atom(get => get(settingsAtom).jlptLevels);
 export const pronunciationAtom = atom(get => get(settingsAtom).pronunciation);
 export const themeAtom = atom(get => get(settingsAtom).theme);
 

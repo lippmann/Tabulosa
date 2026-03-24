@@ -1,8 +1,8 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { Volume2, Search, Bookmark, Shuffle } from 'lucide-react';
 import { cn } from '../lib/utils';
-import type { Word, CEFRLevel, Language } from '../types';
-import { CEFR_LEVELS } from '../types';
+import type { Word, CEFRLevel, Language, JLPTLevel } from '../types';
+import { CEFR_LEVELS, JLPT_LEVELS, JLPT_LEVEL_COLORS } from '../types';
 import { speakText, getDictionaryUrl } from '../hooks/use-vocab';
 
 // Tooltip wrapper component
@@ -49,6 +49,16 @@ const posDisplay: Record<string, string> = {
   article: 'Article',
   determiner: 'Determiner',
 };
+
+// Parse furigana from word_reading format like "身内[みうち]"
+function parseFurigana(wordReading: string): { word: string; reading: string } {
+  // Match pattern: kanji[kana] or just the word
+  const match = wordReading.match(/^(.+?)\[(.+?)\]$/);
+  if (match) {
+    return { word: match[1], reading: match[2] };
+  }
+  return { word: wordReading, reading: '' };
+}
 
 // Small audio button for inline use
 const AudioButton = ({ onClick, title }: { onClick: () => void; title: string }) => (
@@ -97,6 +107,8 @@ const AnimatedBookmark = ({ isSaved }: { isSaved: boolean }) => {
 };
 
 export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isSaved, language }: WordCardProps) {
+  const isJapanese = language === 'japanese';
+
   if (!word) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] text-center animate-fade-in">
@@ -143,7 +155,16 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
     }
   };
 
-  const levelInfo = CEFR_LEVELS[word.cefr_level];
+  const levelInfo = isJapanese 
+    ? JLPT_LEVELS[word.jlpt_level || word.cefr_level as JLPTLevel]
+    : CEFR_LEVELS[word.cefr_level as CEFRLevel];
+  
+  const levelColor = isJapanese 
+    ? JLPT_LEVEL_COLORS[word.jlpt_level || word.cefr_level as JLPTLevel]
+    : levelColors[word.cefr_level as CEFRLevel];
+
+  // Parse furigana for Japanese
+  const furigana = isJapanese && word.word_reading ? parseFurigana(word.word_reading) : null;
 
   return (
     <motion.div
@@ -159,10 +180,10 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
         whileHover={{ scale: 1.05 }}
         className={cn(
           'px-4 py-1.5 rounded-full text-white text-sm font-medium shadow-md cursor-default',
-          levelColors[word.cefr_level]
+          levelColor
         )}
       >
-        {levelInfo.label}
+        {levelInfo?.label}
       </motion.div>
 
       {/* Word with Audio Button */}
@@ -172,9 +193,17 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
         transition={{ delay: 0.15 }}
         className="flex items-center justify-center gap-3"
       >
-        <h1 className="text-6xl md:text-7xl font-bold text-foreground">
-          {word.word}
-        </h1>
+        {isJapanese && furigana ? (
+          // Japanese furigana display
+          <div className="flex flex-col items-center">
+            <span className="text-2xl text-muted-foreground mb-1">{furigana.reading}</span>
+            <h1 className="text-6xl md:text-7xl font-bold text-foreground">{furigana.word}</h1>
+          </div>
+        ) : (
+          <h1 className="text-6xl md:text-7xl font-bold text-foreground">
+            {word.word}
+          </h1>
+        )}
         <AudioButton onClick={playWord} title="Pronounce word" />
       </motion.div>
       
@@ -189,41 +218,47 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
       </motion.p>
 
       {/* Example with Audio Button */}
-      <motion.div
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.25 }}
-        className="max-w-2xl text-center"
-      >
-        <div className="flex items-start justify-center gap-2 mb-2">
-          <p className="text-lg italic text-foreground">
-            "{word.example_sentence_native}"
+      {word.example_sentence_native && (
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.25 }}
+          className="max-w-2xl text-center"
+        >
+          <div className="flex items-start justify-center gap-2 mb-2">
+            <p className="text-lg italic text-foreground">
+              "{word.example_sentence_native}"
+            </p>
+            <AudioButton onClick={playExample} title="Pronounce example" />
+          </div>
+          <p className="text-base text-muted-foreground">
+            {word.example_sentence_english}
           </p>
-          <AudioButton onClick={playExample} title="Pronounce example" />
-        </div>
-        <p className="text-base text-muted-foreground">
-          {word.example_sentence_english}
-        </p>
-      </motion.div>
+        </motion.div>
+      )}
 
-      {/* Part of Speech & Frequency */}
-      <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="flex items-center gap-3"
-      >
-        <div className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm">
-          {posDisplay[word.pos] || word.pos}
-        </div>
-        {word.word_frequency && (
-          <Tooltip label="The smaller the number, the more commonly used">
+      {/* Part of Speech & Frequency - Hidden for Japanese */}
+      {!isJapanese && (
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.3 }}
+          className="flex items-center gap-3"
+        >
+          {word.pos && (
             <div className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm">
-              Freq: {word.word_frequency}
+              {posDisplay[word.pos] || word.pos}
             </div>
-          </Tooltip>
-        )}
-      </motion.div>
+          )}
+          {word.word_frequency > 0 && (
+            <Tooltip label="The smaller the number, the more commonly used">
+              <div className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm">
+                Freq: {word.word_frequency}
+              </div>
+            </Tooltip>
+          )}
+        </motion.div>
+      )}
 
       {/* Actions */}
       <motion.div

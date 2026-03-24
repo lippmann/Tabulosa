@@ -3,11 +3,16 @@
 export type CEFRLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 export type CEFRLevels = Array<{ level: CEFRLevel; enabled: boolean }>;
 
+// JLPT (Japanese Language Proficiency Test) Levels
+// N5: Beginner | N4: Elementary | N3: Intermediate | N2: Pre-Advanced | N1: Advanced
+export type JLPTLevel = 'N5' | 'N4' | 'N3' | 'N2' | 'N1';
+export type JLPTLevels = Array<{ level: JLPTLevel; enabled: boolean }>;
+
 // Part of Speech types
 export type PartOfSpeech = 'noun' | 'verb' | 'adjective' | 'adverb' | 'pronoun' | 'preposition' | 'conjunction' | 'interjection' | 'article' | 'determiner';
 
 // Supported Languages
-export type Language = 'spanish' | 'french' | 'german' | 'italian' | 'portuguese' | 'mandarin' | 'korean' | 'arabic' | 'russian' | 'hindi';
+export type Language = 'spanish' | 'french' | 'german' | 'italian' | 'portuguese' | 'mandarin' | 'korean' | 'japanese' | 'arabic' | 'russian' | 'hindi';
 
 // Language configuration
 export interface LanguageConfig {
@@ -17,6 +22,7 @@ export interface LanguageConfig {
   speechLang: string; // For Web Speech API
   dictionaryUrl: (word: string) => string;
   flagEmoji?: string;
+  isJapanese?: boolean; // Special flag for Japanese
 }
 
 export const LANGUAGES: Record<Language, LanguageConfig> = {
@@ -76,6 +82,15 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     dictionaryUrl: (word) => `https://www.wordreference.com/koen/${encodeURIComponent(word)}`,
     flagEmoji: '🇰🇷',
   },
+  japanese: {
+    code: 'japanese',
+    name: 'Japanese',
+    nativeName: '日本語',
+    speechLang: 'ja-JP',
+    dictionaryUrl: (word) => `https://jisho.org/search/${encodeURIComponent(word)}`,
+    flagEmoji: '🇯🇵',
+    isJapanese: true,
+  },
   arabic: {
     code: 'arabic',
     name: 'Arabic',
@@ -105,14 +120,16 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
 // Word data from JSON
 export interface Word {
   word: string;
-  useful_for_flashcard: boolean;
-  cefr_level: CEFRLevel;
+  useful_for_flashcard?: boolean;
+  cefr_level: CEFRLevel | JLPTLevel; // Support both CEFR and JLPT
   english_translation: string;
   example_sentence_native: string;
   example_sentence_english: string;
   pos: string; // Part of Speech
   word_frequency: number;
   romanization?: string; // For non-Latin scripts
+  word_reading?: string; // For Japanese furigana
+  jlpt_level?: JLPTLevel; // JLPT level for Japanese
 }
 
 export type Mode = 'ichigoichie' | 'random';
@@ -125,6 +142,7 @@ export interface Settings {
   mode: Mode;
   language: Language;
   levels: CEFRLevels;
+  jlptLevels: JLPTLevels; // For Japanese
   pronunciation: boolean;
   theme: ThemeMode;
 }
@@ -161,4 +179,42 @@ export const CEFR_LEVELS: Record<CEFRLevel, { label: string; description: string
     description: 'Full mastery, native-like',
     vocabulary: '15000+'
   }
+};
+
+// JLPT Level Information
+export const JLPT_LEVELS: Record<JLPTLevel, { label: string; description: string; vocabulary: string }> = {
+  N5: {
+    label: 'Beginner (N5)',
+    description: 'Basic daily conversation, simple questions',
+    vocabulary: '~800 words'
+  },
+  N4: {
+    label: 'Elementary (N4)',
+    description: 'Everyday situations, basic opinions',
+    vocabulary: '~1,500 words'
+  },
+  N3: {
+    label: 'Intermediate (N3)',
+    description: 'Abstract concepts, nuanced expressions',
+    vocabulary: '~3,750 words'
+  },
+  N2: {
+    label: 'Pre-Advanced (N2)',
+    description: 'Business conversations, newspapers',
+    vocabulary: '~6,000 words'
+  },
+  N1: {
+    label: 'Advanced (N1)',
+    description: 'Academic discussions, novels',
+    vocabulary: '~10,000 words'
+  }
+};
+
+// JLPT Level Colors
+export const JLPT_LEVEL_COLORS: Record<JLPTLevel, string> = {
+  N5: 'bg-green-500',
+  N4: 'bg-blue-500',
+  N3: 'bg-yellow-500',
+  N2: 'bg-orange-500',
+  N1: 'bg-red-500',
 };

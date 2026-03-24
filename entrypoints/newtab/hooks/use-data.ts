@@ -2,8 +2,9 @@ import { atom, useAtomValue, useSetAtom, useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { useState, useEffect } from 'react';
 
-import { KEY, settingsAtom, modeAtom, languageAtom } from './use-settings';
-import type { CEFRLevel, Word, CEFRLevels } from '../types';
+import { KEY, settingsAtom, modeAtom, languageAtom, jlptLevelsAtom } from './use-settings';
+import type { CEFRLevel, Word, CEFRLevels, JLPTLevel } from '../types';
+import { LANGUAGES } from '../types';
 
 export { languageAtom } from './use-settings';
 
@@ -19,16 +20,34 @@ export const enabledLevelsAtom = atom<CEFRLevel[]>(get => {
     .map(l => l.level);
 });
 
+export const enabledJLPTLevelsAtom = atom<JLPTLevel[]>(get => {
+  const settings = get(settingsAtom);
+  return settings.jlptLevels
+    .filter(l => l.enabled)
+    .map(l => l.level);
+});
+
 export const restOfWordsAtom = atom<Word[]>(get => {
   const words = get(wordsAtom);
   const learned = get(learnedAtom);
   const met = get(metAtom);
   const mode = get(modeAtom);
+  const language = get(languageAtom);
   const enabledLevels = get(enabledLevelsAtom);
+  const enabledJLPTLevels = get(enabledJLPTLevelsAtom);
+
+  const isJapanese = language === 'japanese';
 
   return words.filter(word => {
-    if (!enabledLevels.includes(word.cefr_level))
-      return false;
+    // 根据语言选择不同的等级过滤
+    if (isJapanese) {
+      const wordLevel = word.jlpt_level || word.cefr_level;
+      if (!enabledJLPTLevels.includes(wordLevel as JLPTLevel))
+        return false;
+    } else {
+      if (!enabledLevels.includes(word.cefr_level as CEFRLevel))
+        return false;
+    }
 
     if (mode === 'ichigoichie')
       return !met.includes(word.word);
@@ -119,6 +138,15 @@ export function useData() {
     }));
   }
 
+  function switchJLPTLevel(level: JLPTLevel) {
+    setSettings((prev) => ({
+      ...prev,
+      jlptLevels: prev.jlptLevels.map((item: { level: JLPTLevel; enabled: boolean }) => 
+        item.level === level ? { ...item, enabled: !item.enabled } : item
+      )
+    }));
+  }
+
   function addLearned(value: string) {
     setLearned(p => {
       if (p.includes(value)) return p;
@@ -143,5 +171,5 @@ export function useData() {
     setSaved(p => p.filter(word => word !== value));
   }
 
-  return { switchLevel, addLearned, removeLearned, toggleSaved, removeSaved };
+  return { switchLevel, switchJLPTLevel, addLearned, removeLearned, toggleSaved, removeSaved };
 }

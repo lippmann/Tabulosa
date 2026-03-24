@@ -5,8 +5,8 @@ import * as XLSX from 'xlsx';
 import { useSettings } from '../hooks/use-settings';
 import { useData, savedWordsAtom, languageAtom } from '../hooks/use-data';
 import { cn } from '../lib/utils';
-import type { CEFRLevel, ThemeMode, Language } from '../types';
-import { CEFR_LEVELS, LANGUAGES } from '../types';
+import type { CEFRLevel, ThemeMode, Language, JLPTLevel } from '../types';
+import { CEFR_LEVELS, LANGUAGES, JLPT_LEVEL_COLORS, JLPT_LEVELS } from '../types';
 import { speakText } from '../hooks/use-vocab';
 
 interface SettingsProps {
@@ -24,6 +24,12 @@ const levelColors: Record<CEFRLevel, string> = {
   C2: 'bg-red-500',
 };
 
+// Combined level colors for both CEFR and JLPT
+const combinedLevelColors: Record<CEFRLevel | JLPTLevel, string> = {
+  ...levelColors,
+  ...JLPT_LEVEL_COLORS,
+};
+
 // Theme options
 const themeOptions: { value: ThemeMode; label: string; icon: typeof Sun }[] = [
   { value: 'light', label: 'Light', icon: Sun },
@@ -32,12 +38,13 @@ const themeOptions: { value: ThemeMode; label: string; icon: typeof Sun }[] = [
 
 export function Settings({ isOpen, onClose }: SettingsProps) {
   const { settings, updateSettings, resetSettings, setTheme, setLanguage } = useSettings();
-  const { switchLevel, removeSaved } = useData();
+  const { switchLevel, switchJLPTLevel, removeSaved } = useData();
   const savedWords = useAtomValue(savedWordsAtom);
   const language = useAtomValue(languageAtom);
 
   const currentTheme = settings.theme || 'light';
   const currentLanguage = settings.language || 'spanish';
+  const isJapanese = currentLanguage === 'japanese';
 
   const handlePlayWord = async (word: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -53,32 +60,54 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
 
     // 准备导出数据
     const langName = LANGUAGES[currentLanguage]?.name || 'Language';
-    const exportData = savedWords.map((word, index) => ({
-      'No.': index + 1,
-      'Word': word.word,
-      'Translation': word.english_translation,
-      'CEFR Level': word.cefr_level,
-      'Part of Speech': word.pos,
-      [`Example (${langName})`]: word.example_sentence_native,
-      'Example (English)': word.example_sentence_english,
-      'Frequency': word.word_frequency,
-    }));
+    const exportData = savedWords.map((word, index) => {
+      const baseData: Record<string, unknown> = {
+        'No.': index + 1,
+        'Word': word.word,
+        'Translation': word.english_translation,
+      };
+
+      // 根据语言添加不同的字段
+      if (isJapanese) {
+        baseData['JLPT Level'] = word.jlpt_level || word.cefr_level;
+        baseData['Reading'] = word.word_reading || '';
+      } else {
+        baseData['CEFR Level'] = word.cefr_level;
+        baseData['Part of Speech'] = word.pos;
+      }
+
+      baseData[`Example (${langName})`] = word.example_sentence_native;
+      baseData['Example (English)'] = word.example_sentence_english;
+      baseData['Frequency'] = word.word_frequency;
+
+      return baseData;
+    });
 
     // 创建工作簿和工作表
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.json_to_sheet(exportData);
 
     // 设置列宽
-    ws['!cols'] = [
+    const cols = isJapanese ? [
+      { wch: 5 },   // No.
+      { wch: 15 },  // Word
+      { wch: 30 },  // Translation
+      { wch: 10 },  // JLPT Level
+      { wch: 20 },  // Reading
+      { wch: 50 },  // Example (Japanese)
+      { wch: 50 },  // Example (English)
+      { wch: 10 },  // Frequency
+    ] : [
       { wch: 5 },   // No.
       { wch: 20 },  // Word
       { wch: 30 },  // Translation
       { wch: 12 },  // CEFR Level
       { wch: 15 },  // Part of Speech
-      { wch: 50 },  // Example (Spanish)
+      { wch: 50 },  // Example (Language)
       { wch: 50 },  // Example (English)
       { wch: 10 },  // Frequency
     ];
+    ws['!cols'] = cols;
 
     XLSX.utils.book_append_sheet(wb, ws, 'Saved Words');
 
@@ -226,53 +255,100 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                 </div>
               </div>
 
-              {/* CEFR Level Selection */}
+              {/* Level Selection - CEFR or JLPT based on language */}
               <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-4 text-foreground">CEFR Difficulty Levels</h3>
+                <h3 className="text-lg font-semibold mb-4 text-foreground">
+                  {isJapanese ? 'JLPT Difficulty Levels' : 'CEFR Difficulty Levels'}
+                </h3>
                 <div className="space-y-2">
-                  {settings.levels.map((item) => {
-                    const levelInfo = CEFR_LEVELS[item.level];
-                    return (
-                      <button
-                        key={item.level}
-                        onClick={() => switchLevel(item.level)}
-                        className={cn(
-                          'w-full p-4 rounded-lg text-left transition-colors border-2',
-                          item.enabled
-                            ? 'border-primary bg-primary/10'
-                            : 'border-border hover:border-primary/50 opacity-60'
-                        )}
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className={cn(
-                            'w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm',
-                            levelColors[item.level]
-                          )}>
-                            {item.level}
+                  {isJapanese ? (
+                    // JLPT Level Selection
+                    settings.jlptLevels.map((item) => {
+                      const levelInfo = JLPT_LEVELS[item.level];
+                      return (
+                        <button
+                          key={item.level}
+                          onClick={() => switchJLPTLevel(item.level)}
+                          className={cn(
+                            'w-full p-4 rounded-lg text-left transition-colors border-2',
+                            item.enabled
+                              ? 'border-primary bg-primary/10'
+                              : 'border-border hover:border-primary/50 opacity-60'
+                          )}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={cn(
+                              'w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm',
+                              combinedLevelColors[item.level]
+                            )}>
+                              {item.level}
+                            </div>
+                            <div>
+                              <div className="font-medium text-foreground">
+                                {levelInfo.label}
+                              </div>
+                              <div className="text-xs text-muted-foreground mt-0.5">
+                                {levelInfo.description}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                Vocabulary: {levelInfo.vocabulary}
+                              </div>
+                            </div>
                           </div>
-                          <div>
-                            <div className="font-medium text-foreground">
-                              {levelInfo.label}
+                        </button>
+                      );
+                    })
+                  ) : (
+                    // CEFR Level Selection
+                    settings.levels.map((item) => {
+                      const levelInfo = CEFR_LEVELS[item.level];
+                      return (
+                        <button
+                          key={item.level}
+                          onClick={() => switchLevel(item.level)}
+                          className={cn(
+                            'w-full p-4 rounded-lg text-left transition-colors border-2',
+                            item.enabled
+                              ? 'border-primary bg-primary/10'
+                              : 'border-border hover:border-primary/50 opacity-60'
+                          )}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={cn(
+                              'w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm',
+                              combinedLevelColors[item.level]
+                            )}>
+                              {item.level}
                             </div>
-                            <div className="text-xs text-muted-foreground mt-0.5">
-                              {levelInfo.description}
-                            </div>
-                            <div className="text-xs text-muted-foreground">
-                              Vocabulary: {levelInfo.vocabulary}
+                            <div>
+                              <div className="font-medium text-foreground">
+                                {levelInfo.label}
+                              </div>
+                              <div className="text-xs text-muted-foreground mt-0.5">
+                                {levelInfo.description}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                Vocabulary: {levelInfo.vocabulary}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </button>
-                    );
-                  })}
+                        </button>
+                      );
+                    })
+                  )}
                 </div>
               </div>
 
-              {/* CEFR Info */}
+              {/* Level Info */}
               <div className="mb-8 p-4 bg-muted rounded-lg">
-                <h3 className="text-sm font-semibold mb-2 text-foreground">About CEFR</h3>
+                <h3 className="text-sm font-semibold mb-2 text-foreground">
+                  {isJapanese ? 'About JLPT' : 'About CEFR'}
+                </h3>
                 <p className="text-xs text-muted-foreground">
-                  The Common European Framework of Reference (CEFR) is an international standard for language proficiency, divided into six levels from A1 to C2.
+                  {isJapanese 
+                    ? 'The JLPT (Japanese Language Proficiency Test) has 5 levels: N5 (beginner) to N1 (advanced). N5-N4 test basic understanding of everyday Japanese. N3 tests intermediate communication. N2-N1 test advanced fluency for professional and academic contexts.'
+                    : 'CEFR (Common European Framework of Reference) describes language proficiency from A1 (beginner) to C2 (mastery). A1-A2 cover basic survival needs. B1-B2 enable independent communication. C1-C2 represent advanced fluency.'
+                  }
                 </p>
               </div>
 
@@ -330,7 +406,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                         <div className="flex items-center gap-3 flex-1 min-w-0">
                           <span className={cn(
                             'px-2 py-0.5 rounded text-xs text-white font-medium shrink-0',
-                            levelColors[word.cefr_level]
+                            combinedLevelColors[word.cefr_level]
                           )}>
                             {word.cefr_level}
                           </span>

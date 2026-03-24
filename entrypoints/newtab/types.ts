@@ -7,7 +7,7 @@ export type CEFRLevels = Array<{ level: CEFRLevel; enabled: boolean }>;
 export type PartOfSpeech = 'noun' | 'verb' | 'adjective' | 'adverb' | 'pronoun' | 'preposition' | 'conjunction' | 'interjection' | 'article' | 'determiner';
 
 // Supported Languages
-export type Language = 'spanish' | 'french' | 'german' | 'italian' | 'portuguese' | 'mandarin' | 'korean' | 'japanese' | 'arabic' | 'russian' | 'hindi';
+export type Language = 'spanish' | 'french' | 'german' | 'italian' | 'portuguese' | 'mandarin' | 'korean' | 'arabic' | 'russian' | 'hindi';
 
 // Language configuration
 export interface LanguageConfig {
@@ -75,14 +75,6 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     speechLang: 'ko-KR',
     dictionaryUrl: (word) => `https://www.wordreference.com/koen/${encodeURIComponent(word)}`,
     flagEmoji: '🇰🇷',
-  },
-  japanese: {
-    code: 'japanese',
-    name: 'Japanese',
-    nativeName: '日本語',
-    speechLang: 'ja-JP',
-    dictionaryUrl: (word) => `https://www.wordreference.com/jaen/${encodeURIComponent(word)}`,
-    flagEmoji: '🇯🇵',
   },
   arabic: {
     code: 'arabic',

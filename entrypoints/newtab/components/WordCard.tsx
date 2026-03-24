@@ -152,36 +152,31 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
         </button>
       </motion.div>
 
-      {/* Part of Speech & Frequency - Hidden for Japanese */}
-      {!isJapanese && (
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="flex items-center gap-2 mb-3"
-        >
-          {word.pos && (
-            <div className="px-3 py-1 bg-secondary text-secondary-foreground rounded-full text-xs font-medium">
-              {posDisplay[word.pos] || word.pos}
-            </div>
-          )}
-          {word.word_frequency > 0 && (
-            <div className="px-3 py-1 bg-secondary text-secondary-foreground rounded-full text-xs font-medium">
-              Freq: {word.word_frequency}
-            </div>
-          )}
-        </motion.div>
-      )}
-
-      {/* English Translation */}
-      <motion.p
+      {/* English Translation with POS and Frequency */}
+      <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.25 }}
-        className="text-xl text-muted-foreground mb-8"
+        transition={{ delay: 0.2 }}
+        className="flex items-center gap-2 mb-8"
       >
-        {word.english_translation}
-      </motion.p>
+        {/* Part of Speech - Hidden for Japanese */}
+        {!isJapanese && word.pos && (
+          <span className="px-2.5 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs font-medium">
+            {posDisplay[word.pos] || word.pos}
+          </span>
+        )}
+        
+        <span className="text-xl text-muted-foreground">
+          {word.english_translation}
+        </span>
+        
+        {/* Frequency - Hidden for Japanese */}
+        {!isJapanese && word.word_frequency > 0 && (
+          <span className="px-2.5 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs font-medium">
+            Freq: {word.word_frequency}
+          </span>
+        )}
+      </motion.div>
 
       {/* Example Sentence */}
       {word.example_sentence_native && (

@@ -1,5 +1,6 @@
-import { atom, useAtomValue, useSetAtom } from 'jotai';
+import { atom, useAtomValue, useSetAtom, useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
+import { useState, useEffect } from 'react';
 
 import { KEY, settingsAtom, modeAtom } from './use-settings';
 
@@ -65,18 +66,30 @@ export function useRandomWord() {
   const rest = useAtomValue(restOfWordsAtom);
   const mode = useAtomValue(modeAtom);
   const setMet = useSetAtom(metAtom);
+  const [currentWord, setCurrentWord] = useState<Word | null>(null);
 
-  const randomWord = rest.length > 0 
-    ? rest[Math.floor(Math.random() * rest.length)] 
-    : null;
+  // 初始化时选择一个随机单词
+  useEffect(() => {
+    if (!currentWord && rest.length > 0) {
+      setCurrentWord(rest[Math.floor(Math.random() * rest.length)]);
+    }
+  }, [rest, currentWord]);
 
+  // 切换到下一个单词
   function next() {
-    if (mode === 'ichigoichie' && randomWord) {
-      setMet(p => [randomWord.word, ...p]);
+    if (mode === 'ichigoichie' && currentWord) {
+      setMet(p => [currentWord.word, ...p]);
+    }
+    // 选择新的随机单词
+    if (rest.length > 0) {
+      const newWord = rest[Math.floor(Math.random() * rest.length)];
+      setCurrentWord(newWord);
+    } else {
+      setCurrentWord(null);
     }
   }
 
-  return { randomWord, next };
+  return { randomWord: currentWord, next };
 }
 
 export function useData() {

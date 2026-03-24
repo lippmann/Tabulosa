@@ -1,20 +1,9 @@
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { Volume2, Search, Bookmark, Shuffle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import type { Word, CEFRLevel, Language, JLPTLevel } from '../types';
 import { CEFR_LEVELS, JLPT_LEVELS, JLPT_LEVEL_COLORS } from '../types';
 import { speakText, getDictionaryUrl } from '../hooks/use-vocab';
-
-// Tooltip wrapper component
-const Tooltip = ({ children, label }: { children: React.ReactNode; label: string }) => (
-  <div className="relative group inline-flex">
-    {children}
-    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-foreground text-background text-sm font-medium rounded-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap shadow-lg z-10 pointer-events-none">
-      {label}
-      <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-foreground" />
-    </div>
-  </div>
-);
 
 interface WordCardProps {
   word: Word | null;
@@ -26,85 +15,24 @@ interface WordCardProps {
   language: Language;
 }
 
-// CEFR Level Colors
+// CEFR Level Colors - warm orange style
 const levelColors: Record<CEFRLevel, string> = {
-  A1: 'bg-green-500',
-  A2: 'bg-blue-500',
-  B1: 'bg-yellow-500',
-  B2: 'bg-orange-500',
-  C1: 'bg-purple-500',
-  C2: 'bg-red-500',
-};
-
-// Part of Speech display names
-const posDisplay: Record<string, string> = {
-  noun: 'Noun',
-  verb: 'Verb',
-  adjective: 'Adjective',
-  adverb: 'Adverb',
-  pronoun: 'Pronoun',
-  preposition: 'Preposition',
-  conjunction: 'Conjunction',
-  interjection: 'Interjection',
-  article: 'Article',
-  determiner: 'Determiner',
+  A1: 'bg-[#4CAF50]',
+  A2: 'bg-[#2196F3]',
+  B1: 'bg-[#FFC107]',
+  B2: 'bg-[#E07B39]',
+  C1: 'bg-[#9C27B0]',
+  C2: 'bg-[#F44336]',
 };
 
 // Parse furigana from word_reading format like "身内[みうち]"
 function parseFurigana(wordReading: string): { word: string; reading: string } {
-  // Match pattern: kanji[kana] or just the word
   const match = wordReading.match(/^(.+?)\[(.+?)\]$/);
   if (match) {
     return { word: match[1], reading: match[2] };
   }
   return { word: wordReading, reading: '' };
 }
-
-// Small audio button for inline use
-const AudioButton = ({ onClick, title }: { onClick: () => void; title: string }) => (
-  <motion.button
-    onClick={onClick}
-    whileHover={{ scale: 1.15 }}
-    whileTap={{ scale: 0.9 }}
-    title={title}
-    className="p-2 rounded-full bg-secondary/50 hover:bg-secondary text-muted-foreground hover:text-primary transition-all duration-200 group"
-  >
-    <motion.div
-      whileHover={{ rotate: [0, -15, 15, 0] }}
-      transition={{ duration: 0.4 }}
-    >
-      <Volume2 className="w-5 h-5 md:w-6 md:h-6" />
-    </motion.div>
-  </motion.button>
-);
-
-// Animated Bookmark with fill effect - 从下往上填充
-const AnimatedBookmark = ({ isSaved }: { isSaved: boolean }) => {
-  return (
-    <div className="relative w-6 h-6 overflow-hidden">
-      {/* 空心书签轮廓 */}
-      <Bookmark 
-        className="w-6 h-6 absolute inset-0"
-        strokeWidth={2}
-        fill="none"
-      />
-      {/* 实心书签 - 从下往上填充 */}
-      <motion.div
-        className="absolute inset-0"
-        initial={{ y: "100%" }}
-        animate={{ y: isSaved ? "0%" : "100%" }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-      >
-        <Bookmark 
-          className="w-6 h-6"
-          strokeWidth={2}
-          fill="currentColor"
-          stroke="currentColor"
-        />
-      </motion.div>
-    </div>
-  );
-};
 
 export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isSaved, language }: WordCardProps) {
   const isJapanese = language === 'japanese';
@@ -121,19 +49,19 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
           🎉
         </motion.div>
         <h2 className="text-2xl font-bold mb-2 text-foreground">
-          ¡Felicidades!
+          Congratulations!
         </h2>
         <p className="text-muted-foreground mb-6">
           You've learned all the words!
         </p>
         <motion.button
           onClick={onNext}
-          whileHover={{ scale: 1.1 }}
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="p-4 bg-secondary rounded-xl text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all shadow-md hover:shadow-lg"
-          title="Start over"
+          className="pill-button"
         >
-          <Shuffle className="w-6 h-6" />
+          <Shuffle className="w-5 h-5" />
+          <span>Shuffle</span>
         </motion.button>
       </div>
     );
@@ -163,153 +91,133 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
     ? JLPT_LEVEL_COLORS[word.jlpt_level || word.cefr_level as JLPTLevel]
     : levelColors[word.cefr_level as CEFRLevel];
 
-  // Parse furigana for Japanese
   const furigana = isJapanese && word.word_reading ? parseFurigana(word.word_reading) : null;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-col items-center justify-center gap-8"
+      className="flex flex-col items-center justify-center"
     >
-      {/* Level Badge */}
+      {/* Level Badge - Centered at top */}
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.1 }}
-        whileHover={{ scale: 1.05 }}
         className={cn(
-          'px-4 py-1.5 rounded-full text-white text-sm font-medium shadow-md cursor-default',
+          'px-4 py-1.5 rounded-full text-white text-sm font-medium shadow-sm mb-8',
           levelColor
         )}
       >
         {levelInfo?.label}
       </motion.div>
 
-      {/* Word with Audio Button */}
+      {/* Main Word - Large serif font */}
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.15 }}
-        className="flex items-center justify-center gap-3"
+        className="flex items-center gap-3 mb-3"
       >
         {isJapanese && furigana ? (
-          // Japanese furigana display
           <div className="flex flex-col items-center">
-            <span className="text-2xl text-muted-foreground mb-1">{furigana.reading}</span>
-            <h1 className="text-6xl md:text-7xl font-bold text-foreground">{furigana.word}</h1>
+            <span className="text-xl text-muted-foreground mb-1">{furigana.reading}</span>
+            <h1 className="text-5xl md:text-6xl font-bold text-foreground font-serif-display">{furigana.word}</h1>
           </div>
         ) : (
-          <h1 className="text-6xl md:text-7xl font-bold text-foreground">
+          <h1 className="text-5xl md:text-6xl font-bold text-foreground font-serif-display">
             {word.word}
           </h1>
         )}
-        <AudioButton onClick={playWord} title="Pronounce word" />
+        <button
+          onClick={playWord}
+          className="p-2 rounded-full hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all"
+          title="Pronounce word"
+        >
+          <Volume2 className="w-5 h-5" />
+        </button>
       </motion.div>
-      
-      {/* Translation */}
+
+      {/* English Translation */}
       <motion.p
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2 }}
-        className="text-3xl text-muted-foreground"
+        className="text-xl text-muted-foreground mb-8"
       >
         {word.english_translation}
       </motion.p>
 
-      {/* Example with Audio Button */}
+      {/* Example Sentence */}
       {word.example_sentence_native && (
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.25 }}
-          className="max-w-2xl text-center"
+          className="max-w-xl text-center mb-10"
         >
-          <div className="flex items-start justify-center gap-2 mb-2">
-            <p className="text-lg italic text-foreground">
-              "{word.example_sentence_native}"
+          <div className="flex items-start justify-center gap-2 mb-1">
+            <p className="text-base text-foreground">
+              {word.example_sentence_native}
             </p>
-            <AudioButton onClick={playExample} title="Pronounce example" />
+            <button
+              onClick={playExample}
+              className="p-1 rounded-full hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all flex-shrink-0"
+              title="Pronounce example"
+            >
+              <Volume2 className="w-4 h-4" />
+            </button>
           </div>
-          <p className="text-base text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             {word.example_sentence_english}
           </p>
         </motion.div>
       )}
 
-      {/* Part of Speech & Frequency - Hidden for Japanese */}
-      {!isJapanese && (
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="flex items-center gap-3"
-        >
-          {word.pos && (
-            <div className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm">
-              {posDisplay[word.pos] || word.pos}
-            </div>
-          )}
-          {word.word_frequency > 0 && (
-            <Tooltip label="The smaller the number, the more commonly used">
-              <div className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm">
-                Freq: {word.word_frequency}
-              </div>
-            </Tooltip>
-          )}
-        </motion.div>
-      )}
-
-      {/* Actions */}
+      {/* Action Buttons - Pill style */}
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.35 }}
-        className="flex items-center gap-4 mt-6"
+        className="flex items-center gap-3"
       >
-        {/* Dictionary Link - Search */}
-        <Tooltip label="Look up in dictionary">
-          <motion.a
-            href={getDictionaryUrl(word.word, language)}
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            className="p-4 bg-secondary rounded-xl text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all shadow-md hover:shadow-lg"
-          >
-            <Search className="w-6 h-6" />
-          </motion.a>
-        </Tooltip>
+        {/* Search Button */}
+        <motion.a
+          href={getDictionaryUrl(word.word, language)}
+          target="_blank"
+          rel="noopener noreferrer"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="pill-button cursor-pointer"
+        >
+          <Search className="w-4 h-4" />
+          <span>Search</span>
+        </motion.a>
         
         {/* Save Button */}
-        <Tooltip label={isSaved ? "Remove from saved" : "Save word"}>
-          <motion.button
-            onClick={onSave}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            className={cn(
-              "p-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg",
-              "bg-secondary",
-              isSaved 
-                ? "text-primary" 
-                : "text-muted-foreground hover:text-primary hover:bg-secondary/80"
-            )}
-          >
-            <AnimatedBookmark isSaved={isSaved} />
-          </motion.button>
-        </Tooltip>
+        <motion.button
+          onClick={onSave}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className={cn(
+            "pill-button",
+            isSaved && "bg-primary text-white"
+          )}
+        >
+          <Bookmark className={cn("w-4 h-4", isSaved && "fill-current")} />
+          <span>{isSaved ? 'Saved' : 'Save'}</span>
+        </motion.button>
         
-        {/* Random Next Button */}
-        <Tooltip label="Next word">
-          <motion.button
-            onClick={onNext}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            className="p-4 bg-secondary rounded-xl text-muted-foreground hover:text-primary hover:bg-secondary/80 transition-all shadow-md hover:shadow-lg"
-          >
-            <Shuffle className="w-6 h-6" />
-          </motion.button>
-        </Tooltip>
+        {/* Shuffle Button */}
+        <motion.button
+          onClick={onNext}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="pill-button"
+        >
+          <Shuffle className="w-4 h-4" />
+          <span>Shuffle</span>
+        </motion.button>
       </motion.div>
     </motion.div>
   );

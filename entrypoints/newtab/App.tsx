@@ -12,7 +12,7 @@ import { LANGUAGES } from './types';
 
 // Logo image component
 const Logo = () => (
-  <img src="/icon.png" alt="Tabulosa" width="56" height="56" className="object-contain" />
+  <img src="/icon.png" alt="Tabulosa" width="40" height="40" className="object-contain" />
 );
 
 export default function App() {
@@ -24,7 +24,6 @@ export default function App() {
   // Preload TTS voices
   useEffect(() => {
     preloadVoices();
-    // Some browsers load voices asynchronously
     if ('speechSynthesis' in window) {
       window.speechSynthesis.onvoiceschanged = preloadVoices;
     }
@@ -63,37 +62,35 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-background text-foreground relative overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }} />
-      </div>
+      {/* Dot Grid Background Pattern */}
+      <div className="absolute inset-0 dot-pattern opacity-30" />
 
       {/* Header */}
       <motion.header
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="fixed top-0 left-0 right-0 z-30 px-6 py-4 flex items-center justify-between"
+        className="fixed top-0 left-0 right-0 z-30 px-6 py-4 flex items-center justify-between bg-background/80 backdrop-blur-sm"
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Logo />
-          <span className="text-lg font-semibold text-foreground">
-            tabulosa <span className="text-muted-foreground">·</span> <span className="text-muted-foreground">{LANGUAGES[language]?.name}</span>
+          <span className="text-base font-medium text-foreground">
+            tabulosa
           </span>
+          <span className="text-muted-foreground">·</span>
+          <span className="text-base text-muted-foreground">{LANGUAGES[language]?.name}</span>
         </div>
         
         <button
           onClick={() => setShowSettings(true)}
-          className="p-2 hover:bg-secondary rounded-lg transition-colors"
+          className="p-2 hover:bg-secondary rounded-full transition-colors"
           title="Open settings"
         >
-          <SettingsIcon className="w-6 h-6 text-foreground" />
+          <SettingsIcon className="w-5 h-5 text-muted-foreground" />
         </button>
       </motion.header>
 
       {/* Main Content */}
-      <main className="relative z-10 min-h-screen flex items-center justify-center px-6 py-20">
+      <main className="relative z-10 min-h-screen flex items-center justify-center px-6 py-24">
         <WordCard
           word={randomWord}
           showPronunciation={showPronunciation}
@@ -110,15 +107,6 @@ export default function App() {
         isOpen={showSettings}
         onClose={() => setShowSettings(false)}
       />
-
-      {/* Footer */}
-      <motion.footer
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="fixed bottom-0 left-0 right-0 z-30 px-6 py-4 text-center text-sm text-muted-foreground"
-      >
-        Tabulosa: learn a new word every time you open a new tab
-      </motion.footer>
     </div>
   );
 }

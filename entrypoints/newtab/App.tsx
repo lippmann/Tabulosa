@@ -8,6 +8,7 @@ import { useTheme } from './hooks/use-theme';
 import { useLoadWords, preloadVoices } from './hooks/use-vocab';
 import { useRandomWord, useData, savedAtom, languageAtom } from './hooks/use-data';
 import { useSettings, pronunciationAtom } from './hooks/use-settings';
+import { LANGUAGES } from './types';
 
 export default function App() {
   const [showSettings, setShowSettings] = useState(false);
@@ -68,6 +69,9 @@ export default function App() {
           <Book className="w-6 h-6 text-primary" />
           <span className="text-lg font-bold text-foreground">
             Tabulosa
+          </span>
+          <span className="text-sm text-muted-foreground">
+            · {LANGUAGES[language]?.name}
           </span>
         </div>
         

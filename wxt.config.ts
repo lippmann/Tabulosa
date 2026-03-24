@@ -7,8 +7,8 @@ export default defineConfig({
   manifestVersion: 3,
   modules: ['@wxt-dev/module-react'],
   manifest: {
-    name: 'Spanish Tab of Words',
-    description: 'A minimal Chrome / Firefox extension to help you learn Spanish words in each new tab.',
+    name: 'Tabulosa - Vocabulary New Tab',
+    description: 'Learn vocabulary in Spanish, French, German, Italian, Portuguese, Japanese, Korean, Mandarin, Arabic, Russian, and Hindi - every time you open a new tab.',
     version: '1.0.0',
     chrome_url_overrides: {
       newtab: 'newtab.html'

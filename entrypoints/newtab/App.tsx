@@ -12,7 +12,7 @@ import { LANGUAGES } from './types';
 
 // Logo image component
 const Logo = () => (
-  <img src="/icon.png" alt="Tabulosa" width="28" height="28" className="object-contain" />
+  <img src="/icon.png" alt="Tabulosa" width="56" height="56" className="object-contain" />
 );
 
 export default function App() {

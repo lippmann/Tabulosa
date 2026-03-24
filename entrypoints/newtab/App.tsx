@@ -10,31 +10,9 @@ import { useRandomWord, useData, savedAtom, languageAtom } from './hooks/use-dat
 import { useSettings, pronunciationAtom } from './hooks/use-settings';
 import { LANGUAGES } from './types';
 
-// Logo SVG component - folder outline with Ñ (Spanish letter)
+// Logo image component
 const Logo = () => (
-  <svg width="28" height="28" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-    {/* Folder outline (hollow stroke style) */}
-    <path 
-      d="M14 38C14 34.134 17.134 31 21 31H42L50 23H72L80 31H107C110.866 31 114 34.134 114 38V106C114 109.866 110.866 113 107 113H21C17.134 113 14 109.866 14 106V38Z" 
-      stroke="currentColor" 
-      strokeWidth="6"
-      fill="none"
-    />
-    {/* Letter Ñ (filled) */}
-    <g fill="currentColor">
-      <rect x="38" y="52" width="10" height="38"/>
-      <rect x="80" y="52" width="10" height="38"/>
-      <polygon points="80,52 90,52 48,90 38,90"/>
-    </g>
-    {/* Tilde ~ above N */}
-    <path 
-      d="M46 46Q54 40 62 46Q70 52 82 44" 
-      stroke="currentColor" 
-      strokeWidth="5" 
-      strokeLinecap="round"
-      fill="none"
-    />
-  </svg>
+  <img src="/icon.png" alt="Tabulosa" width="28" height="28" className="object-contain" />
 );
 
 export default function App() {
@@ -99,9 +77,7 @@ export default function App() {
         className="fixed top-0 left-0 right-0 z-30 px-6 py-4 flex items-center justify-between"
       >
         <div className="flex items-center gap-2">
-          <span className="text-[#D4736A]">
-            <Logo />
-          </span>
+          <Logo />
           <span className="text-lg font-semibold text-foreground">
             tabulosa <span className="text-muted-foreground">·</span> <span className="text-muted-foreground">{LANGUAGES[language]?.name}</span>
           </span>

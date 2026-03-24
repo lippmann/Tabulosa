@@ -11,8 +11,15 @@ export function useLoadWords() {
   useEffect(() => {
     fetch(`/data/${language}.json`)
       .then(res => res.json())
-      .then((data: Word[]) => {
-        setWords(data);
+      .then((data: Record<string, unknown>[]) => {
+        // 对阿拉伯语进行特殊处理：将 diacritized_word 映射到 word
+        const normalizedData = data.map(item => {
+          if ('diacritized_word' in item && !('word' in item)) {
+            return { ...item, word: item.diacritized_word } as unknown as Word;
+          }
+          return item as unknown as Word;
+        });
+        setWords(normalizedData);
       })
       .catch(err => {
         console.error('Failed to load words:', err);

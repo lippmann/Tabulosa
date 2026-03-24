@@ -10,11 +10,12 @@ import { useRandomWord, useData, savedAtom, languageAtom } from './hooks/use-dat
 import { useSettings, pronunciationAtom } from './hooks/use-settings';
 import { LANGUAGES } from './types';
 
-// Logo SVG component
+// Logo SVG component - open book/document shape with notch
 const Logo = () => (
-  <svg width="24" height="24" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="24" y="20" width="80" height="88" rx="8" stroke="currentColor" strokeWidth="6" fill="none"/>
-    <line x1="44" y1="56" x2="84" y2="56" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
+  <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="3" y="3" width="22" height="22" rx="3" stroke="currentColor" strokeWidth="2" fill="none"/>
+    <line x1="3" y1="10" x2="10" y2="10" stroke="currentColor" strokeWidth="2"/>
+    <line x1="10" y1="3" x2="10" y2="10" stroke="currentColor" strokeWidth="2"/>
   </svg>
 );
 

@@ -60,7 +60,7 @@ const AudioButton = ({ onClick, title }: { onClick: () => void; title: string })
 const AnimatedBookmark = ({ isSaved }: { isSaved: boolean }) => {
   return (
     <div className="relative w-6 h-6 overflow-hidden">
-      {/* 空心书签 */}
+      {/* 空心书签轮廓 */}
       <Bookmark 
         className="w-6 h-6 absolute inset-0"
         strokeWidth={2}
@@ -72,7 +72,6 @@ const AnimatedBookmark = ({ isSaved }: { isSaved: boolean }) => {
         initial={{ y: "100%" }}
         animate={{ y: isSaved ? "0%" : "100%" }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        style={{ overflow: "hidden" }}
       >
         <Bookmark 
           className="w-6 h-6"
@@ -239,9 +238,10 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
           whileTap={{ scale: 0.95 }}
           className={cn(
             "p-4 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg",
+            "bg-secondary",
             isSaved 
-              ? "bg-primary text-primary-foreground" 
-              : "bg-secondary text-muted-foreground hover:text-primary hover:bg-secondary/80"
+              ? "text-primary" 
+              : "text-muted-foreground hover:text-primary hover:bg-secondary/80"
           )}
           title={isSaved ? "Remove from saved" : "Save word"}
         >

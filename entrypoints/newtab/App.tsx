@@ -68,10 +68,7 @@ export default function App() {
         <div className="flex items-center gap-2">
           <Book className="w-6 h-6 text-primary" />
           <span className="text-lg font-bold text-foreground">
-            Tabulosa
-          </span>
-          <span className="text-sm text-muted-foreground">
-            · {LANGUAGES[language]?.name}
+            Tabulosa · {LANGUAGES[language]?.name}
           </span>
         </div>
         

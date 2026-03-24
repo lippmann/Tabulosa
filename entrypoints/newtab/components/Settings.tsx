@@ -201,14 +201,6 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                 </div>
               </div>
 
-              {/* CEFR Info */}
-              <div className="mb-8 p-4 bg-muted rounded-lg">
-                <h3 className="text-sm font-semibold mb-2 text-foreground">About CEFR</h3>
-                <p className="text-xs text-muted-foreground">
-                  The Common European Framework of Reference (CEFR) is an international standard for language proficiency, divided into six levels from A1 to C2.
-                </p>
-              </div>
-
               {/* Mode Selection */}
               <div className="mb-8">
                 <h3 className="text-lg font-semibold mb-4 text-foreground">Learning Mode</h3>
@@ -274,6 +266,14 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                     );
                   })}
                 </div>
+              </div>
+
+              {/* CEFR Info */}
+              <div className="mb-8 p-4 bg-muted rounded-lg">
+                <h3 className="text-sm font-semibold mb-2 text-foreground">About CEFR</h3>
+                <p className="text-xs text-muted-foreground">
+                  The Common European Framework of Reference (CEFR) is an international standard for language proficiency, divided into six levels from A1 to C2.
+                </p>
               </div>
 
               {/* Reset */}

@@ -6,7 +6,7 @@ import { WordCard } from './components/WordCard';
 import { Settings } from './components/Settings';
 import { useTheme } from './hooks/use-theme';
 import { useLoadWords, preloadVoices } from './hooks/use-vocab';
-import { useRandomWord, useData, savedAtom } from './hooks/use-data';
+import { useRandomWord, useData, savedAtom, languageAtom } from './hooks/use-data';
 import { useSettings, pronunciationAtom } from './hooks/use-settings';
 
 export default function App() {
@@ -28,6 +28,7 @@ export default function App() {
   const { addLearned, toggleSaved } = useData();
   const showPronunciation = useAtomValue(pronunciationAtom);
   const savedWords = useAtomValue(savedAtom);
+  const language = useAtomValue(languageAtom);
 
   const handleLearn = () => {
     if (randomWord) {
@@ -88,6 +89,7 @@ export default function App() {
           onNext={handleNext}
           onSave={handleSave}
           isSaved={isSaved}
+          language={language}
         />
       </main>
 

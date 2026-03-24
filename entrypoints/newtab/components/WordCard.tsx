@@ -1,9 +1,9 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { Volume2, Search, Bookmark, Shuffle } from 'lucide-react';
 import { cn } from '../lib/utils';
-import type { Word, CEFRLevel } from '../types';
+import type { Word, CEFRLevel, Language } from '../types';
 import { CEFR_LEVELS } from '../types';
-import { speakSpanish, getDictionaryUrl } from '../hooks/use-vocab';
+import { speakText, getDictionaryUrl } from '../hooks/use-vocab';
 
 // Tooltip wrapper component
 const Tooltip = ({ children, label }: { children: React.ReactNode; label: string }) => (
@@ -23,6 +23,7 @@ interface WordCardProps {
   onNext: () => void;
   onSave: () => void;
   isSaved: boolean;
+  language: Language;
 }
 
 // CEFR Level Colors
@@ -95,7 +96,7 @@ const AnimatedBookmark = ({ isSaved }: { isSaved: boolean }) => {
   );
 };
 
-export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isSaved }: WordCardProps) {
+export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isSaved, language }: WordCardProps) {
   if (!word) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] text-center animate-fade-in">
@@ -128,7 +129,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
 
   const playWord = async () => {
     try {
-      await speakSpanish(word.word);
+      await speakText(word.word, language);
     } catch (err) {
       console.error('Failed to play audio:', err);
     }
@@ -136,7 +137,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
 
   const playExample = async () => {
     try {
-      await speakSpanish(word.example_sentence_native);
+      await speakText(word.example_sentence_native, language);
     } catch (err) {
       console.error('Failed to play example:', err);
     }
@@ -234,7 +235,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
         {/* Dictionary Link - Search */}
         <Tooltip label="Look up in dictionary">
           <motion.a
-            href={getDictionaryUrl(word.word)}
+            href={getDictionaryUrl(word.word, language)}
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.1 }}

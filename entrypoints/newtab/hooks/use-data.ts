@@ -2,9 +2,10 @@ import { atom, useAtomValue, useSetAtom, useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { useState, useEffect } from 'react';
 
-import { KEY, settingsAtom, modeAtom } from './use-settings';
-
+import { KEY, settingsAtom, modeAtom, languageAtom } from './use-settings';
 import type { CEFRLevel, Word, CEFRLevels } from '../types';
+
+export { languageAtom } from './use-settings';
 
 export const wordsAtom = atom<Word[]>([]);
 export const learnedAtom = atomWithStorage<string[]>(`${KEY}-learned`, []);

@@ -1,13 +1,13 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Settings as SettingsIcon, X, Check, Sun, Moon, Trash2, Volume2, Bookmark, Download } from 'lucide-react';
+import { Settings as SettingsIcon, X, Check, Sun, Moon, Trash2, Volume2, Bookmark, Download, Languages } from 'lucide-react';
 import { useAtomValue } from 'jotai';
 import * as XLSX from 'xlsx';
 import { useSettings } from '../hooks/use-settings';
-import { useData, savedWordsAtom } from '../hooks/use-data';
+import { useData, savedWordsAtom, languageAtom } from '../hooks/use-data';
 import { cn } from '../lib/utils';
-import type { CEFRLevel, ThemeMode } from '../types';
-import { CEFR_LEVELS } from '../types';
-import { speakSpanish } from '../hooks/use-vocab';
+import type { CEFRLevel, ThemeMode, Language } from '../types';
+import { CEFR_LEVELS, LANGUAGES } from '../types';
+import { speakText } from '../hooks/use-vocab';
 
 interface SettingsProps {
   isOpen: boolean;
@@ -31,16 +31,18 @@ const themeOptions: { value: ThemeMode; label: string; icon: typeof Sun }[] = [
 ];
 
 export function Settings({ isOpen, onClose }: SettingsProps) {
-  const { settings, updateSettings, resetSettings, setTheme } = useSettings();
+  const { settings, updateSettings, resetSettings, setTheme, setLanguage } = useSettings();
   const { switchLevel, removeSaved } = useData();
   const savedWords = useAtomValue(savedWordsAtom);
+  const language = useAtomValue(languageAtom);
 
   const currentTheme = settings.theme || 'light';
+  const currentLanguage = settings.language || 'spanish';
 
   const handlePlayWord = async (word: string, e: React.MouseEvent) => {
     e.stopPropagation();
     try {
-      await speakSpanish(word);
+      await speakText(word, currentLanguage);
     } catch (err) {
       console.error('Failed to play audio:', err);
     }
@@ -50,13 +52,14 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
     if (savedWords.length === 0) return;
 
     // 准备导出数据
+    const langName = LANGUAGES[currentLanguage]?.name || 'Language';
     const exportData = savedWords.map((word, index) => ({
       'No.': index + 1,
       'Word': word.word,
       'Translation': word.english_translation,
       'CEFR Level': word.cefr_level,
       'Part of Speech': word.pos,
-      'Example (Spanish)': word.example_sentence_native,
+      [`Example (${langName})`]: word.example_sentence_native,
       'Example (English)': word.example_sentence_english,
       'Frequency': word.word_frequency,
     }));
@@ -80,7 +83,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
     XLSX.utils.book_append_sheet(wb, ws, 'Saved Words');
 
     // 下载文件
-    XLSX.writeFile(wb, `spanish-saved-words-${new Date().toISOString().split('T')[0]}.xlsx`);
+    XLSX.writeFile(wb, `${currentLanguage}-saved-words-${new Date().toISOString().split('T')[0]}.xlsx`);
   };
 
   return (
@@ -198,6 +201,42 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                     ))}
                   </div>
                 )}
+              </div>
+
+              {/* Language Selection */}
+              <div className="mb-8">
+                <div className="flex items-center gap-2 mb-4">
+                  <Languages className="w-5 h-5 text-primary" />
+                  <h3 className="text-lg font-semibold text-foreground">Language</h3>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {Object.values(LANGUAGES).map((lang) => {
+                    const isSelected = currentLanguage === lang.code;
+                    return (
+                      <motion.button
+                        key={lang.code}
+                        onClick={() => setLanguage(lang.code)}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className={cn(
+                          'relative p-3 rounded-lg transition-all duration-200 border-2 flex items-center gap-2',
+                          isSelected
+                            ? 'border-primary bg-primary/10 shadow-md'
+                            : 'border-border hover:border-primary/50'
+                        )}
+                      >
+                        <span className="text-xl">{lang.flagEmoji}</span>
+                        <div className="flex-1 text-left min-w-0">
+                          <div className="font-medium text-foreground text-sm truncate">{lang.name}</div>
+                          <div className="text-xs text-muted-foreground truncate">{lang.nativeName}</div>
+                        </div>
+                        {isSelected && (
+                          <Check className="w-4 h-4 text-primary shrink-0" />
+                        )}
+                      </motion.button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Theme Selection */}

@@ -1,13 +1,14 @@
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 
-import type { CEFRLevel, CEFRLevels, Mode, Settings, ThemeMode } from '../types';
+import type { CEFRLevel, CEFRLevels, Mode, Settings, ThemeMode, Language } from '../types';
 
-export const KEY = 'spanish-tab-of-words';
+export const KEY = 'tabulosa';
 
 const defaultSettings: Settings = {
   version: '1.0.0',
   mode: 'random',
+  language: 'spanish',
   levels: [
     { level: 'A1', enabled: true },
     { level: 'A2', enabled: true },
@@ -22,6 +23,7 @@ const defaultSettings: Settings = {
 
 export const settingsAtom = atomWithStorage<Settings>(KEY, defaultSettings);
 export const modeAtom = atom(get => get(settingsAtom).mode);
+export const languageAtom = atom(get => get(settingsAtom).language);
 export const levelsAtom = atom(get => get(settingsAtom).levels);
 export const pronunciationAtom = atom(get => get(settingsAtom).pronunciation);
 export const themeAtom = atom(get => get(settingsAtom).theme);
@@ -42,5 +44,9 @@ export function useSettings() {
     updateSettings({ theme });
   }
 
-  return { settings, updateSettings, resetSettings, setTheme };
+  function setLanguage(language: Language) {
+    updateSettings({ language });
+  }
+
+  return { settings, updateSettings, resetSettings, setTheme, setLanguage };
 }

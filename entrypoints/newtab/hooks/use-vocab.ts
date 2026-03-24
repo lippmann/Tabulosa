@@ -1,13 +1,15 @@
 import { useEffect } from 'react';
-import { useSetAtom } from 'jotai';
-import { wordsAtom } from './use-data';
-import type { Word } from '../types';
+import { useSetAtom, useAtomValue } from 'jotai';
+import { wordsAtom, languageAtom } from './use-data';
+import type { Word, Language } from '../types';
+import { LANGUAGES } from '../types';
 
 export function useLoadWords() {
   const setWords = useSetAtom(wordsAtom);
+  const language = useAtomValue(languageAtom);
 
   useEffect(() => {
-    fetch('/data/words.json')
+    fetch(`/data/${language}.json`)
       .then(res => res.json())
       .then((data: Word[]) => {
         setWords(data);
@@ -15,19 +17,21 @@ export function useLoadWords() {
       .catch(err => {
         console.error('Failed to load words:', err);
       });
-  }, [setWords]);
+  }, [setWords, language]);
 }
 
-export function getDictionaryUrl(word: string) {
-  return `https://www.spanishdict.com/translate/${encodeURIComponent(word)}`;
+export function getDictionaryUrl(word: string, language: Language = 'spanish') {
+  return LANGUAGES[language].dictionaryUrl(word);
 }
 
-// Spanish TTS - 优先使用高质量服务，回退到 Web Speech API
-export function speakSpanish(text: string): Promise<void> {
+// TTS for any language - 优先使用高质量服务，回退到 Web Speech API
+export function speakText(text: string, language: Language = 'spanish'): Promise<void> {
+  const langConfig = LANGUAGES[language];
+  
   return new Promise((resolve, reject) => {
     // 首先尝试使用 background script 调用高质量 TTS
     if (typeof browser !== 'undefined' && browser.runtime) {
-      browser.runtime.sendMessage({ type: 'TTS', text })
+      browser.runtime.sendMessage({ type: 'TTS', text, lang: langConfig.speechLang })
         .then(response => {
           if (response && response.success && response.audioUrl) {
             const audio = new Audio(response.audioUrl);
@@ -38,29 +42,29 @@ export function speakSpanish(text: string): Promise<void> {
             };
             audio.onerror = () => {
               // 回退到 Web Speech API
-              speakWithWebSpeech(text).then(resolve).catch(reject);
+              speakWithWebSpeech(text, langConfig.speechLang).then(resolve).catch(reject);
             };
             audio.play().catch(() => {
-              speakWithWebSpeech(text).then(resolve).catch(reject);
+              speakWithWebSpeech(text, langConfig.speechLang).then(resolve).catch(reject);
             });
           } else {
             // 没有成功响应，使用 Web Speech API
-            speakWithWebSpeech(text).then(resolve).catch(reject);
+            speakWithWebSpeech(text, langConfig.speechLang).then(resolve).catch(reject);
           }
         })
         .catch(() => {
           // 通信失败，使用 Web Speech API
-          speakWithWebSpeech(text).then(resolve).catch(reject);
+          speakWithWebSpeech(text, langConfig.speechLang).then(resolve).catch(reject);
         });
     } else {
       // 非扩展环境，直接使用 Web Speech API
-      speakWithWebSpeech(text).then(resolve).catch(reject);
+      speakWithWebSpeech(text, langConfig.speechLang).then(resolve).catch(reject);
     }
   });
 }
 
 // 使用 Web Speech API（优化配置）
-function speakWithWebSpeech(text: string): Promise<void> {
+function speakWithWebSpeech(text: string, lang: string): Promise<void> {
   return new Promise((resolve, reject) => {
     if (!('speechSynthesis' in window)) {
       reject(new Error('Speech synthesis not supported'));
@@ -71,7 +75,7 @@ function speakWithWebSpeech(text: string): Promise<void> {
     window.speechSynthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'es-ES';
+    utterance.lang = lang;
     utterance.rate = 0.85; // 稍慢便于学习
     utterance.pitch = 1.0;
     utterance.volume = 1.0;
@@ -79,24 +83,27 @@ function speakWithWebSpeech(text: string): Promise<void> {
     // 获取可用声音并选择最好的
     const voices = window.speechSynthesis.getVoices();
     
-    // 按优先级选择最好的西班牙语声音
+    // 提取语言代码前缀（如 'es-ES' -> 'es'）
+    const langPrefix = lang.split('-')[0];
+    
+    // 按优先级选择最好的声音
     const voicePriority = [
       // Google 在线声音（通常最自然）
       (v: SpeechSynthesisVoice) => 
-        v.lang.startsWith('es') && 
+        v.lang.startsWith(langPrefix) && 
         v.name.toLowerCase().includes('google'),
       // Microsoft 高质量声音
       (v: SpeechSynthesisVoice) => 
-        v.lang.startsWith('es') && 
+        v.lang.startsWith(langPrefix) && 
         v.name.toLowerCase().includes('microsoft'),
       // 在线服务声音（通常质量更好）
       (v: SpeechSynthesisVoice) => 
-        v.lang.startsWith('es') && 
+        v.lang.startsWith(langPrefix) && 
         !v.localService,
-      // 西班牙本土声音
-      (v: SpeechSynthesisVoice) => v.lang === 'es-ES',
-      // 任何西班牙语声音
-      (v: SpeechSynthesisVoice) => v.lang.startsWith('es'),
+      // 精确匹配
+      (v: SpeechSynthesisVoice) => v.lang === lang,
+      // 任何匹配语言的声音
+      (v: SpeechSynthesisVoice) => v.lang.startsWith(langPrefix),
     ];
 
     let selectedVoice: SpeechSynthesisVoice | undefined;

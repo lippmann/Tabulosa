@@ -6,6 +6,110 @@ export type CEFRLevels = Array<{ level: CEFRLevel; enabled: boolean }>;
 // Part of Speech types
 export type PartOfSpeech = 'noun' | 'verb' | 'adjective' | 'adverb' | 'pronoun' | 'preposition' | 'conjunction' | 'interjection' | 'article' | 'determiner';
 
+// Supported Languages
+export type Language = 'spanish' | 'french' | 'german' | 'italian' | 'portuguese' | 'mandarin' | 'korean' | 'japanese' | 'arabic' | 'russian' | 'hindi';
+
+// Language configuration
+export interface LanguageConfig {
+  code: Language;
+  name: string;
+  nativeName: string;
+  speechLang: string; // For Web Speech API
+  dictionaryUrl: (word: string) => string;
+  flagEmoji?: string;
+}
+
+export const LANGUAGES: Record<Language, LanguageConfig> = {
+  spanish: {
+    code: 'spanish',
+    name: 'Spanish',
+    nativeName: 'Español',
+    speechLang: 'es-ES',
+    dictionaryUrl: (word) => `https://www.spanishdict.com/translate/${encodeURIComponent(word)}`,
+    flagEmoji: '🇪🇸',
+  },
+  french: {
+    code: 'french',
+    name: 'French',
+    nativeName: 'Français',
+    speechLang: 'fr-FR',
+    dictionaryUrl: (word) => `https://www.wordreference.com/enfr/${encodeURIComponent(word)}`,
+    flagEmoji: '🇫🇷',
+  },
+  german: {
+    code: 'german',
+    name: 'German',
+    nativeName: 'Deutsch',
+    speechLang: 'de-DE',
+    dictionaryUrl: (word) => `https://www.wordreference.com/deen/${encodeURIComponent(word)}`,
+    flagEmoji: '🇩🇪',
+  },
+  italian: {
+    code: 'italian',
+    name: 'Italian',
+    nativeName: 'Italiano',
+    speechLang: 'it-IT',
+    dictionaryUrl: (word) => `https://www.wordreference.com/iten/${encodeURIComponent(word)}`,
+    flagEmoji: '🇮🇹',
+  },
+  portuguese: {
+    code: 'portuguese',
+    name: 'Portuguese',
+    nativeName: 'Português',
+    speechLang: 'pt-PT',
+    dictionaryUrl: (word) => `https://www.wordreference.com/pten/${encodeURIComponent(word)}`,
+    flagEmoji: '🇵🇹',
+  },
+  mandarin: {
+    code: 'mandarin',
+    name: 'Mandarin',
+    nativeName: '中文',
+    speechLang: 'zh-CN',
+    dictionaryUrl: (word) => `https://www.wordreference.com/zhen/${encodeURIComponent(word)}`,
+    flagEmoji: '🇨🇳',
+  },
+  korean: {
+    code: 'korean',
+    name: 'Korean',
+    nativeName: '한국어',
+    speechLang: 'ko-KR',
+    dictionaryUrl: (word) => `https://www.wordreference.com/koen/${encodeURIComponent(word)}`,
+    flagEmoji: '🇰🇷',
+  },
+  japanese: {
+    code: 'japanese',
+    name: 'Japanese',
+    nativeName: '日本語',
+    speechLang: 'ja-JP',
+    dictionaryUrl: (word) => `https://www.wordreference.com/jaen/${encodeURIComponent(word)}`,
+    flagEmoji: '🇯🇵',
+  },
+  arabic: {
+    code: 'arabic',
+    name: 'Arabic',
+    nativeName: 'العربية',
+    speechLang: 'ar-SA',
+    dictionaryUrl: (word) => `https://www.wordreference.com/aren/${encodeURIComponent(word)}`,
+    flagEmoji: '🇸🇦',
+  },
+  russian: {
+    code: 'russian',
+    name: 'Russian',
+    nativeName: 'Русский',
+    speechLang: 'ru-RU',
+    dictionaryUrl: (word) => `https://www.wordreference.com/ruen/${encodeURIComponent(word)}`,
+    flagEmoji: '🇷🇺',
+  },
+  hindi: {
+    code: 'hindi',
+    name: 'Hindi',
+    nativeName: 'हिन्दी',
+    speechLang: 'hi-IN',
+    dictionaryUrl: (word) => `https://www.wordreference.com/hien/${encodeURIComponent(word)}`,
+    flagEmoji: '🇮🇳',
+  },
+};
+
 // Word data from JSON
 export interface Word {
   word: string;
@@ -16,6 +120,7 @@ export interface Word {
   example_sentence_english: string;
   pos: string; // Part of Speech
   word_frequency: number;
+  romanization?: string; // For non-Latin scripts
 }
 
 export type Mode = 'ichigoichie' | 'random';
@@ -26,6 +131,7 @@ export type ThemeMode = 'light' | 'dark';
 export interface Settings {
   version: string;
   mode: Mode;
+  language: Language;
   levels: CEFRLevels;
   pronunciation: boolean;
   theme: ThemeMode;

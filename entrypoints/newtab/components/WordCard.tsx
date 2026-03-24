@@ -206,7 +206,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
         </div>
         {word.word_frequency && (
           <div className="px-3 py-1 bg-secondary text-secondary-foreground rounded-md text-sm">
-            Freq: #{word.word_frequency}
+            Freq: {word.word_frequency}
           </div>
         )}
       </motion.div>

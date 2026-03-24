@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Settings as SettingsIcon, Book } from 'lucide-react';
+import { Settings as SettingsIcon } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useAtomValue } from 'jotai';
 import { WordCard } from './components/WordCard';
@@ -9,6 +9,14 @@ import { useLoadWords, preloadVoices } from './hooks/use-vocab';
 import { useRandomWord, useData, savedAtom, languageAtom } from './hooks/use-data';
 import { useSettings, pronunciationAtom } from './hooks/use-settings';
 import { LANGUAGES } from './types';
+
+// Logo SVG component
+const Logo = () => (
+  <svg width="24" height="24" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="24" y="20" width="80" height="88" rx="8" stroke="currentColor" strokeWidth="6" fill="none"/>
+    <line x1="44" y1="56" x2="84" y2="56" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/>
+  </svg>
+);
 
 export default function App() {
   const [showSettings, setShowSettings] = useState(false);
@@ -30,6 +38,12 @@ export default function App() {
   const showPronunciation = useAtomValue(pronunciationAtom);
   const savedWords = useAtomValue(savedAtom);
   const language = useAtomValue(languageAtom);
+
+  // Update page title dynamically
+  useEffect(() => {
+    const langName = LANGUAGES[language]?.name || 'Spanish';
+    document.title = `Tabulosa · ${langName}`;
+  }, [language]);
 
   const handleLearn = () => {
     if (randomWord) {
@@ -66,9 +80,11 @@ export default function App() {
         className="fixed top-0 left-0 right-0 z-30 px-6 py-4 flex items-center justify-between"
       >
         <div className="flex items-center gap-2">
-          <Book className="w-6 h-6 text-primary" />
-          <span className="text-lg font-bold text-foreground">
-            Tabulosa · {LANGUAGES[language]?.name}
+          <span className="text-[#D4736A]">
+            <Logo />
+          </span>
+          <span className="text-lg font-semibold text-foreground">
+            tabulosa <span className="text-muted-foreground">·</span> <span className="text-muted-foreground">{LANGUAGES[language]?.name}</span>
           </span>
         </div>
         

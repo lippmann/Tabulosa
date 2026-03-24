@@ -7,7 +7,7 @@ export default defineConfig({
   manifestVersion: 3,
   modules: ['@wxt-dev/module-react'],
   manifest: {
-    name: 'Tabulosa - Vocabulary New Tab',
+    name: 'Tabulosa',
     description: 'Learn vocabulary in Spanish, French, German, Italian, Portuguese, Japanese, Korean, Mandarin, Arabic, Russian, and Hindi - every time you open a new tab.',
     version: '1.0.0',
     chrome_url_overrides: {

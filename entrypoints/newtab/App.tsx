@@ -106,7 +106,7 @@ export default function App() {
         animate={{ y: 0, opacity: 1 }}
         className="fixed bottom-0 left-0 right-0 z-30 px-6 py-4 text-center text-sm text-muted-foreground"
       >
-        Learn a Spanish word every time you open a new tab · CEFR-based levels
+        Tabulosa: learn a new word every time you open a new tab
       </motion.footer>
     </div>
   );

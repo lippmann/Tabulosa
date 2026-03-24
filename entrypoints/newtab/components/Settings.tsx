@@ -318,25 +318,6 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                 </div>
               </div>
 
-              {/* Pronunciation Toggle */}
-              <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-4 text-foreground">Display Options</h3>
-                <button
-                  onClick={() => updateSettings({ pronunciation: !settings.pronunciation })}
-                  className={cn(
-                    'w-full p-4 rounded-lg text-left transition-colors border-2',
-                    settings.pronunciation
-                      ? 'border-primary bg-primary/10'
-                      : 'border-border hover:border-primary/50 opacity-60'
-                  )}
-                >
-                  <div className="font-medium text-foreground">Show Pronunciation</div>
-                  <div className="text-sm text-muted-foreground mt-1">
-                    Display IPA phonetics below words
-                  </div>
-                </button>
-              </div>
-
               {/* Reset */}
               <button
                 onClick={resetSettings}

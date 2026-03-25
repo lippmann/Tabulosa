@@ -224,13 +224,13 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
           transition={{ delay: 0.3 }}
           className="max-w-xl text-center mb-10"
         >
-          <div className="flex items-start justify-center gap-2 mb-1">
+          <div className="relative mb-1">
             <p className="text-base text-foreground">
               {word.example_sentence_native}
             </p>
             <button
               onClick={playExample}
-              className="p-1 rounded-full hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all flex-shrink-0"
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-8 p-1 rounded-full hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all"
               title="Pronounce example"
             >
               <Volume2 className="w-4 h-4" />

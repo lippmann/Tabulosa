@@ -10,11 +10,6 @@ import { useRandomWord, useData, savedAtom, languageAtom } from './hooks/use-dat
 import { useSettings, pronunciationAtom } from './hooks/use-settings';
 import { LANGUAGES } from './types';
 
-// Logo image component
-const Logo = () => (
-  <img src="/icon.png" alt="Tabulosa" width="40" height="40" className="object-contain" />
-);
-
 export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   
@@ -70,32 +65,19 @@ export default function App() {
       {/* Dot Grid Background Pattern */}
       <div className="absolute inset-0 dot-pattern opacity-30" />
 
-      {/* Header */}
-      <motion.header
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="fixed top-0 left-0 right-0 z-30 px-6 py-4 flex items-center justify-between bg-background/80 backdrop-blur-sm"
+      {/* Settings Button */}
+      <motion.button
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        onClick={() => setShowSettings(true)}
+        className="fixed top-4 right-6 z-30 p-2 hover:bg-secondary rounded-full transition-colors"
+        title="Open settings"
       >
-        <div className="flex items-center gap-3">
-          <Logo />
-          <span className="text-base font-medium text-foreground">
-            tabulosa
-          </span>
-          <span className="text-muted-foreground">·</span>
-          <span className="text-base text-muted-foreground">{LANGUAGES[language]?.name}</span>
-        </div>
-        
-        <button
-          onClick={() => setShowSettings(true)}
-          className="p-2 hover:bg-secondary rounded-full transition-colors"
-          title="Open settings"
-        >
-          <SettingsIcon className="w-5 h-5 text-muted-foreground" />
-        </button>
-      </motion.header>
+        <SettingsIcon className="w-5 h-5 text-muted-foreground" />
+      </motion.button>
 
       {/* Main Content */}
-      <main className="relative z-10 min-h-screen flex items-center justify-center px-6 py-24">
+      <main className="relative z-10 min-h-screen flex items-center justify-center px-6 py-16">
         <WordCard
           word={randomWord}
           showPronunciation={showPronunciation}

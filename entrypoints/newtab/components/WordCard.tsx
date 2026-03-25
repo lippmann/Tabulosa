@@ -166,7 +166,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.15 }}
-        className="flex items-center gap-3 mb-4"
+        className="relative mb-4"
       >
         {isJapanese && word.word_reading ? (
           <h1 className="text-5xl md:text-6xl font-bold text-foreground font-serif-display ruby-container">
@@ -179,7 +179,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
         )}
         <button
           onClick={playWord}
-          className="p-2 rounded-full hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all"
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 p-2 rounded-full hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all"
           title="Pronounce word"
         >
           <Volume2 className="w-5 h-5" />

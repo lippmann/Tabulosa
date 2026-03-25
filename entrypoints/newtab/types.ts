@@ -210,11 +210,11 @@ export const JLPT_LEVELS: Record<JLPTLevel, { label: string; description: string
   }
 };
 
-// JLPT Level Colors
+// JLPT Level Colors - Match CEFR palette (N5=A1, N4=A2, N3=B1, N2=B2, N1=C1)
 export const JLPT_LEVEL_COLORS: Record<JLPTLevel, string> = {
-  N5: 'bg-green-500',
-  N4: 'bg-blue-500',
-  N3: 'bg-yellow-500',
-  N2: 'bg-orange-500',
-  N1: 'bg-red-500',
+  N5: 'bg-[#E0E0E0] text-[#4A4A4A]',
+  N4: 'bg-[#D1D9CE] text-[#4A4A4A]',
+  N3: 'bg-[#D2E0EB] text-[#4A4A4A]',
+  N2: 'bg-[#EAD9C8] text-[#4A4A4A]',
+  N1: 'bg-[#DAC9D2] text-[#4A4A4A]',
 };

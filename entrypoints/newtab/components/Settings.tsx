@@ -258,9 +258,12 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
 
               {/* Level Selection - CEFR or JLPT based on language */}
               <div className="mb-8">
-                <h3 className="text-lg font-semibold mb-4 text-foreground">
+                <h3 className="text-lg font-semibold mb-2 text-foreground">
                   {isJapanese ? 'JLPT Difficulty Levels' : 'CEFR Difficulty Levels'}
                 </h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Select the difficulty levels you want to learn
+                </p>
                 <div className="space-y-2">
                   {isJapanese ? (
                     // JLPT Level Selection

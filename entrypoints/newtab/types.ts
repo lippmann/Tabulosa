@@ -21,7 +21,7 @@ export interface LanguageConfig {
   nativeName: string;
   speechLang: string; // For Web Speech API
   dictionaryUrl: (word: string) => string;
-  flagEmoji?: string;
+  flagSvg: string; // SVG flag path
   isJapanese?: boolean; // Special flag for Japanese
 }
 
@@ -32,7 +32,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     nativeName: 'Español',
     speechLang: 'es-ES',
     dictionaryUrl: (word) => `https://www.spanishdict.com/translate/${encodeURIComponent(word)}`,
-    flagEmoji: '🇪🇸',
+    flagSvg: '/flags/es.svg',
   },
   french: {
     code: 'french',
@@ -40,7 +40,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     nativeName: 'Français',
     speechLang: 'fr-FR',
     dictionaryUrl: (word) => `https://www.wordreference.com/enfr/${encodeURIComponent(word)}`,
-    flagEmoji: '🇫🇷',
+    flagSvg: '/flags/fr.svg',
   },
   german: {
     code: 'german',
@@ -48,7 +48,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     nativeName: 'Deutsch',
     speechLang: 'de-DE',
     dictionaryUrl: (word) => `https://www.wordreference.com/deen/${encodeURIComponent(word)}`,
-    flagEmoji: '🇩🇪',
+    flagSvg: '/flags/de.svg',
   },
   italian: {
     code: 'italian',
@@ -56,7 +56,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     nativeName: 'Italiano',
     speechLang: 'it-IT',
     dictionaryUrl: (word) => `https://www.wordreference.com/iten/${encodeURIComponent(word)}`,
-    flagEmoji: '🇮🇹',
+    flagSvg: '/flags/it.svg',
   },
   portuguese: {
     code: 'portuguese',
@@ -64,7 +64,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     nativeName: 'Português',
     speechLang: 'pt-PT',
     dictionaryUrl: (word) => `https://www.wordreference.com/pten/${encodeURIComponent(word)}`,
-    flagEmoji: '🇵🇹',
+    flagSvg: '/flags/pt.svg',
   },
   mandarin: {
     code: 'mandarin',
@@ -72,7 +72,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     nativeName: '中文',
     speechLang: 'zh-CN',
     dictionaryUrl: (word) => `https://www.wordreference.com/zhen/${encodeURIComponent(word)}`,
-    flagEmoji: '🇨🇳',
+    flagSvg: '/flags/cn.svg',
   },
   korean: {
     code: 'korean',
@@ -80,7 +80,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     nativeName: '한국어',
     speechLang: 'ko-KR',
     dictionaryUrl: (word) => `https://www.wordreference.com/koen/${encodeURIComponent(word)}`,
-    flagEmoji: '🇰🇷',
+    flagSvg: '/flags/kr.svg',
   },
   japanese: {
     code: 'japanese',
@@ -88,7 +88,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     nativeName: '日本語',
     speechLang: 'ja-JP',
     dictionaryUrl: (word) => `https://jisho.org/search/${encodeURIComponent(word)}`,
-    flagEmoji: '🇯🇵',
+    flagSvg: '/flags/jp.svg',
     isJapanese: true,
   },
   arabic: {
@@ -97,7 +97,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     nativeName: 'العربية',
     speechLang: 'ar-SA',
     dictionaryUrl: (word) => `https://www.wordreference.com/aren/${encodeURIComponent(word)}`,
-    flagEmoji: '🇸🇦',
+    flagSvg: '/flags/sa.svg',
   },
   russian: {
     code: 'russian',
@@ -105,7 +105,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     nativeName: 'Русский',
     speechLang: 'ru-RU',
     dictionaryUrl: (word) => `https://www.wordreference.com/ruen/${encodeURIComponent(word)}`,
-    flagEmoji: '🇷🇺',
+    flagSvg: '/flags/ru.svg',
   },
   hindi: {
     code: 'hindi',
@@ -113,7 +113,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     nativeName: 'हिन्दी',
     speechLang: 'hi-IN',
     dictionaryUrl: (word) => `https://www.wordreference.com/hien/${encodeURIComponent(word)}`,
-    flagEmoji: '🇮🇳',
+    flagSvg: '/flags/in.svg',
   },
 };
 

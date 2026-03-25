@@ -170,7 +170,11 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                             : 'border-border hover:border-primary/50'
                         )}
                       >
-                        <span className="text-xl">{lang.flagEmoji}</span>
+                        <img 
+                          src={lang.flagSvg} 
+                          alt={lang.name}
+                          className="w-6 h-6"
+                        />
                         <div className="flex-1 text-left min-w-0">
                           <div className="font-medium text-foreground text-sm truncate">{lang.name}</div>
                           <div className="text-xs text-muted-foreground truncate">{lang.nativeName}</div>

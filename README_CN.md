@@ -161,7 +161,9 @@ pnpm dev:preview
 
 ## 致谢
 
-灵感来源于 [the-tab-of-words](https://github.com/kahosan/the-tab-of-words)。
+- 灵感来源于 [the-tab-of-words](https://github.com/kahosan/the-tab-of-words)
+- 词汇数据（日语除外）来自 [Language-Learning-decks](https://github.com/vbvss199/Language-Learning-decks)
+- 日语词汇数据来自 [Ankidrone Essentials](https://tatsumoto.neocities.org/blog/ankidrone-essentials)
 
 ## 许可证
 

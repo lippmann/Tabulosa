@@ -161,7 +161,9 @@ Edit the JSON files in `public/data/` to add or modify vocabulary:
 
 ## Acknowledgments
 
-Inspired by [the-tab-of-words](https://github.com/kahosan/the-tab-of-words).
+- Inspired by [the-tab-of-words](https://github.com/kahosan/the-tab-of-words)
+- Vocabulary data (except Japanese) from [Language-Learning-decks](https://github.com/vbvss199/Language-Learning-decks)
+- Japanese vocabulary data from [Ankidrone Essentials](https://tatsumoto.neocities.org/blog/ankidrone-essentials)
 
 ## License
 

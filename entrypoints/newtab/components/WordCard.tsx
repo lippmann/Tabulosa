@@ -40,13 +40,38 @@ const posDisplay: Record<string, string> = {
   determiner: 'Det',
 };
 
-// Parse furigana from word_reading format like "身内[みうち]"
-function parseFurigana(wordReading: string): { word: string; reading: string } {
-  const match = wordReading.match(/^(.+?)\[(.+?)\]$/);
-  if (match) {
-    return { word: match[1], reading: match[2] };
+// Parse furigana from word_reading format like "身内[みうち]" or "座[すわ]る"
+// Returns React elements with ruby tags for proper furigana display
+function renderFurigana(wordReading: string) {
+  const elements: React.ReactNode[] = [];
+  let key = 0;
+  
+  // Match pattern: text[reading] or just text
+  const regex = /([^\[\]]+)(?:\[([^\]]+)\])?/g;
+  let match;
+  let lastIndex = 0;
+  
+  // Find all patterns like 漢字[かんじ] or ひらがな
+  const allMatches = [...wordReading.matchAll(/([^\[\]]+?)\[([^\]]+)\]|([^\[\]]+)/g)];
+  
+  for (const m of allMatches) {
+    if (m[1] !== undefined && m[2] !== undefined) {
+      // Has furigana: 漢字[かんじ]
+      const kanji = m[1];
+      const reading = m[2];
+      elements.push(
+        <ruby key={key++} className="ruby-text">
+          {kanji}
+          <rt className="text-sm">{reading}</rt>
+        </ruby>
+      );
+    } else if (m[3] !== undefined) {
+      // No furigana: just plain text (hiragana, katakana, etc.)
+      elements.push(<span key={key++}>{m[3]}</span>);
+    }
   }
-  return { word: wordReading, reading: '' };
+  
+  return elements.length > 0 ? elements : wordReading;
 }
 
 export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onRestart, isSaved, language }: WordCardProps) {
@@ -117,8 +142,6 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
     ? JLPT_LEVEL_COLORS[word.jlpt_level || word.cefr_level as JLPTLevel]
     : levelColors[word.cefr_level as CEFRLevel];
 
-  const furigana = isJapanese && word.word_reading ? parseFurigana(word.word_reading) : null;
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -145,11 +168,10 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
         transition={{ delay: 0.15 }}
         className="flex items-center gap-3 mb-4"
       >
-        {isJapanese && furigana ? (
-          <div className="flex flex-col items-center">
-            <span className="text-xl text-muted-foreground mb-1">{furigana.reading}</span>
-            <h1 className="text-5xl md:text-6xl font-bold text-foreground font-serif-display">{furigana.word}</h1>
-          </div>
+        {isJapanese && word.word_reading ? (
+          <h1 className="text-5xl md:text-6xl font-bold text-foreground font-serif-display ruby-container">
+            {renderFurigana(word.word_reading)}
+          </h1>
         ) : (
           <h1 className="text-5xl md:text-6xl font-bold text-foreground font-serif-display">
             {word.word}

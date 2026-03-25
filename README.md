@@ -1,123 +1,168 @@
-# Spanish Tab of Words
+# Tabulosa
 
-一个帮助你在每次打开新标签页时学习西班牙语单词的 Chrome/Firefox 浏览器扩展。
+A browser extension that helps you learn vocabulary every time you open a new tab. Transform your browsing habits into a powerful language learning experience.
 
-## 功能特点
+[中文文档](./README_CN.md)
 
-- 🎯 **新标签页学习** - 每次打开新标签页都会显示一个西班牙语单词
-- 📚 **分级学习** - 支持初级、中级、高级等不同难度级别
-- 🔊 **发音支持** - 点击即可听到单词的标准西班牙语发音
-- 📖 **例句展示** - 每个单词都配有例句和中文翻译
-- 🎨 **美观界面** - 简洁优雅的界面设计，学习体验舒适
-- ⚙️ **灵活设置** - 可自定义学习模式、难度级别等
+## Features
 
-## 学习模式
+- **11 Languages Supported** - Spanish, French, German, Italian, Portuguese, Japanese, Korean, Mandarin, Arabic, Russian, and Hindi
+- **Smart Level System** - CEFR levels (A1-C2) for all languages, JLPT levels (N5-N1) for Japanese
+- **Native Audio Pronunciation** - Listen to authentic pronunciation with text-to-speech
+- **Example Sentences** - Learn words in context with native example sentences
+- **Two Learning Modes**:
+  - **Random Mode**: Words can appear multiple times, perfect for reinforcement
+  - **Ichigo Ichie Mode**: Each word appears only once until you've learned them all
+- **Progress Tracking** - Track learned words and save favorites for review
+- **Clean, Minimal Design** - Distraction-free learning with a warm cream background and elegant typography
+- **Offline Ready** - All vocabulary stored locally, works without internet
 
-### 随机模式
-随机显示单词，可以重复学习，适合反复巩固。
+## Supported Languages
 
-### 一期一会模式
-每个单词只会出现一次，学习完所有单词后会重新开始，适合系统学习。
+| Language | Native Name | Levels |
+|----------|-------------|--------|
+| Spanish | Español | A1-C2 |
+| French | Français | A1-C2 |
+| German | Deutsch | A1-C2 |
+| Italian | Italiano | A1-C2 |
+| Portuguese | Português | A1-C2 |
+| Japanese | 日本語 | JLPT N5-N1 |
+| Korean | 한국어 | A1-C2 |
+| Mandarin | 中文 | A1-C2 |
+| Arabic | العربية | A1-C2 |
+| Russian | Русский | A1-C2 |
+| Hindi | हिन्दी | A1-C2 |
 
-## 安装方法
+## Installation
 
-### 从源码构建
+### From Source
 
-1. 克隆仓库
-```bash
-git clone <repository-url>
-cd spanish-tab-of-words
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-username/tabulosa.git
+   cd tabulosa
+   ```
 
-2. 安装依赖
-```bash
-pnpm install
-```
+2. **Install dependencies**
+   ```bash
+   pnpm install
+   ```
 
-3. 构建扩展
-```bash
-pnpm build
-```
+3. **Build for Chrome**
+   ```bash
+   pnpm build
+   ```
 
-4. 加载扩展
-   - 打开 Chrome 浏览器，访问 `chrome://extensions/`
-   - 开启"开发者模式"
-   - 点击"加载已解压的扩展程序"
-   - 选择项目中的 `.output/chrome-mv3` 目录
+4. **Load the extension**
+   - Open Chrome and navigate to `chrome://extensions/`
+   - Enable "Developer mode" in the top right
+   - Click "Load unpacked"
+   - Select the `.output/chrome-mv3` folder
 
-### Firefox 用户
+### Firefox
+
 ```bash
 pnpm build:firefox
 ```
-然后在 Firefox 的 `about:debugging` 页面加载 `.output/firefox-mv2` 目录。
 
-## 开发
+Then load the `.output/firefox-mv2` folder in `about:debugging`.
 
-### 预览模式
+## Development
+
 ```bash
+# Start development server with hot reload
+pnpm dev
+
+# Preview in browser (for UI development)
 pnpm dev:preview
 ```
-访问 http://localhost:5000 查看预览效果。
 
-### 开发模式
-```bash
-pnpm dev
-```
-需要在系统中安装 Chrome 或 Chromium 浏览器。
+## Tech Stack
 
-## 项目结构
+- **Framework**: [WXT](https://wxt.dev/) - Modern Web Extension framework
+- **UI**: React 19 + TypeScript
+- **Styling**: Tailwind CSS 4
+- **State Management**: Jotai
+- **Animation**: Motion
+- **Build Tool**: Vite
+
+## Project Structure
 
 ```
 .
 ├── entrypoints/
-│   └── newtab/          # 新标签页组件
-│       ├── App.tsx      # 主应用组件
-│       ├── components/  # UI 组件
-│       ├── hooks/       # 自定义 Hooks
-│       └── lib/         # 工具函数
+│   └── newtab/              # New tab page
+│       ├── App.tsx          # Main application
+│       ├── components/      # UI components
+│       ├── hooks/           # Custom React hooks
+│       └── lib/             # Utility functions
 ├── public/
-│   └── data/
-│       └── words.json   # 单词数据库
-└── wxt.config.ts        # WXT 配置文件
+│   ├── data/                # Vocabulary JSON files
+│   │   ├── spanish.json
+│   │   ├── french.json
+│   │   └── ...
+│   └── flags/               # SVG flag icons
+├── assets/                  # Extension icons
+└── wxt.config.ts           # WXT configuration
 ```
 
-## 技术栈
+## Level Reference
 
-- **框架**: WXT (Web Extension Tools)
-- **UI**: React 19 + TypeScript
-- **样式**: Tailwind CSS 4
-- **动画**: Motion
-- **状态管理**: Jotai
+### CEFR Levels (Common European Framework of Reference)
 
-## 自定义单词
+| Level | Name | Description | Vocabulary |
+|-------|------|-------------|------------|
+| A1 | Beginner | Basic everyday communication | 900-1,000 words |
+| A2 | Elementary | Simple daily situations | 2,000-3,000 words |
+| B1 | Intermediate | Independent communication | 5,000-6,000 words |
+| B2 | Upper-Intermediate | Professional communication | 7,000-8,000 words |
+| C1 | Advanced | Near-native fluency | 10,000+ words |
+| C2 | Proficiency | Full mastery, native-like | 15,000+ words |
 
-你可以编辑 `public/data/words.json` 文件来添加或修改单词：
+### JLPT Levels (Japanese Language Proficiency Test)
+
+| Level | Description | Vocabulary |
+|-------|-------------|------------|
+| N5 | Basic daily conversation | ~800 words |
+| N4 | Everyday situations | ~1,500 words |
+| N3 | Abstract concepts | ~3,750 words |
+| N2 | Business conversations | ~6,000 words |
+| N1 | Academic discussions | ~10,000 words |
+
+## Customizing Vocabulary
+
+Edit the JSON files in `public/data/` to add or modify vocabulary:
 
 ```json
 {
   "word": "hola",
-  "meaning": "你好",
-  "pronunciation": "/ˈola/",
-  "example": "¡Hola! ¿Cómo estás?",
-  "exampleTranslation": "你好！你好吗？",
-  "level": 1,
-  "category": "greetings"
+  "cefr_level": "A1",
+  "english_translation": "hello",
+  "example_sentence_native": "¡Hola! ¿Cómo estás?",
+  "example_sentence_english": "Hello! How are you?",
+  "pos": "interjection",
+  "word_frequency": 100
 }
 ```
 
-字段说明：
-- `word`: 西班牙语单词
-- `meaning`: 中文含义
-- `pronunciation`: 国际音标
-- `example: 西班牙语例句
-- `exampleTranslation`: 例句中文翻译
-- `level`: 难度级别 (1-5)
-- `category`: 单词分类
+### For Japanese Words
 
-## 许可证
+```json
+{
+  "word": "こんにちは",
+  "jlpt_level": "N5",
+  "english_translation": "hello",
+  "example_sentence_native": "こんにちは、お元気ですか？",
+  "example_sentence_english": "Hello, how are you?",
+  "word_reading": "こんにちは",
+  "romanization": "konnichiwa"
+}
+```
+
+## Acknowledgments
+
+Inspired by [the-tab-of-words](https://github.com/kahosan/the-tab-of-words).
+
+## License
 
 MIT License
-
-## 致谢
-
-本项目灵感来源于 [the-tab-of-words](https://github.com/kahosan/the-tab-of-words)，原项目用于学习日语单词。

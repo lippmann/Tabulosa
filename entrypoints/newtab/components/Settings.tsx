@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Settings as SettingsIcon, X, Check, Sun, Moon, Trash2, Volume2, Bookmark, Download, Languages } from 'lucide-react';
+import { Settings as SettingsIcon, X, Check, Sun, Moon, Trash2, Volume2, Bookmark, Download } from 'lucide-react';
 import { useAtomValue } from 'jotai';
 import * as XLSX from 'xlsx';
 import { useSettings } from '../hooks/use-settings';
@@ -153,10 +153,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
 
               {/* Language Selection */}
               <div className="mb-8">
-                <div className="flex items-center gap-2 mb-4">
-                  <Languages className="w-5 h-5 text-primary" />
-                  <h3 className="text-lg font-semibold text-foreground">Language</h3>
-                </div>
+                <h3 className="text-lg font-semibold text-foreground mb-4">Languages</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {Object.values(LANGUAGES).map((lang) => {
                     const isSelected = currentLanguage === lang.code;

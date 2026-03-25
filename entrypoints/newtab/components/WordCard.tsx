@@ -152,30 +152,31 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
         </button>
       </motion.div>
 
-      {/* English Translation with POS and Frequency */}
+      {/* Part of Speech, English Translation, Frequency - Hidden for Japanese */}
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2 }}
-        className="flex items-center gap-2 mb-8"
+        className="flex items-center gap-3 mb-8"
       >
-        {/* Part of Speech - Hidden for Japanese */}
-        {!isJapanese && word.pos && (
-          <span className="px-2.5 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs font-medium">
-            {posDisplay[word.pos] || word.pos}
-          </span>
+        {!isJapanese && (
+          <>
+            {word.pos && (
+              <span className="text-xl text-muted-foreground">
+                {posDisplay[word.pos] || word.pos}
+              </span>
+            )}
+            {word.word_frequency > 0 && (
+              <span className="text-xl text-muted-foreground">
+                [{word.word_frequency}]
+              </span>
+            )}
+          </>
         )}
         
         <span className="text-xl text-muted-foreground">
           {word.english_translation}
         </span>
-        
-        {/* Frequency - Hidden for Japanese */}
-        {!isJapanese && word.word_frequency > 0 && (
-          <span className="px-2.5 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs font-medium">
-            Freq: {word.word_frequency}
-          </span>
-        )}
       </motion.div>
 
       {/* Example Sentence */}

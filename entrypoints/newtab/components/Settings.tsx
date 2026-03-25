@@ -14,14 +14,14 @@ interface SettingsProps {
   onClose: () => void;
 }
 
-// CEFR Level Colors
+// CEFR Level Colors - Soft minimal palette
 const levelColors: Record<CEFRLevel, string> = {
-  A1: 'bg-green-500',
-  A2: 'bg-blue-500',
-  B1: 'bg-yellow-500',
-  B2: 'bg-orange-500',
-  C1: 'bg-purple-500',
-  C2: 'bg-red-500',
+  A1: 'bg-[#E0E0E0] text-[#4A4A4A]',
+  A2: 'bg-[#D1D9CE] text-[#4A4A4A]',
+  B1: 'bg-[#D2E0EB] text-[#4A4A4A]',
+  B2: 'bg-[#EAD9C8] text-[#4A4A4A]',
+  C1: 'bg-[#DAC9D2] text-[#4A4A4A]',
+  C2: 'bg-[#C9D6D6] text-[#4A4A4A]',
 };
 
 // Combined level colors for both CEFR and JLPT
@@ -278,7 +278,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                         >
                           <div className="flex items-center gap-3">
                             <div className={cn(
-                              'w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm',
+                              'w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm',
                               combinedLevelColors[item.level]
                             )}>
                               {item.level}
@@ -315,7 +315,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                         >
                           <div className="flex items-center gap-3">
                             <div className={cn(
-                              'w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm',
+                              'w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm',
                               combinedLevelColors[item.level]
                             )}>
                               {item.level}
@@ -405,7 +405,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                       >
                         <div className="flex items-center gap-3 flex-1 min-w-0">
                           <span className={cn(
-                            'px-2 py-0.5 rounded text-xs text-white font-medium shrink-0',
+                            'px-2 py-0.5 rounded text-xs font-medium shrink-0',
                             combinedLevelColors[word.cefr_level]
                           )}>
                             {word.cefr_level}

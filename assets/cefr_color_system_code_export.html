@@ -1,0 +1,83 @@
+# Tabulosa CEFR Level Color System - Code Export
+
+Here is the complete color code system for the Tabulosa language levels (A1-C2). These are optimized for a minimalist, high-end aesthetic.
+
+## 1. CSS Variables
+Copy and paste this into your `:root` or main CSS file.
+
+```css
+/* Tabulosa CEFR Color System */
+:root {
+  --color-a1-beginner: #E0E0E0; /* Soft Pebble Gray */
+  --color-a2-elementary: #D1D9CE; /* Sage Mist */
+  --color-b1-intermediate: #D2E0EB; /* Dusty Sky Blue */
+  --color-b2-upper-int: #EAD9C8; /* Muted Ochre */
+  --color-c1-advanced: #DAC9D2; /* Vintage Rose */
+  --color-c2-mastery: #C9D6D6; /* Steel Teal */
+  
+  /* Text color for contrast on these backgrounds */
+  --color-level-text: #4A4A4A; 
+}
+```
+
+## 2. JSON Configuration
+Use this for JavaScript-based styling or theme configuration.
+
+```json
+{
+  "cefrColors": {
+    "A1": {
+      "name": "Beginner",
+      "hex": "#E0E0E0",
+      "label": "Soft Pebble Gray"
+    },
+    "A2": {
+      "name": "Elementary",
+      "hex": "#D1D9CE",
+      "label": "Sage Mist"
+    },
+    "B1": {
+      "name": "Intermediate",
+      "hex": "#D2E0EB",
+      "label": "Dusty Sky Blue"
+    },
+    "B2": {
+      "name": "Upper-Int",
+      "hex": "#EAD9C8",
+      "label": "Muted Ochre"
+    },
+    "C1": {
+      "name": "Advanced",
+      "hex": "#DAC9D2",
+      "label": "Vintage Rose"
+    },
+    "C2": {
+      "name": "Mastery",
+      "hex": "#C9D6D6",
+      "label": "Steel Teal"
+    }
+  }
+}
+```
+
+## 3. Usage Example (Tailwind CSS)
+If you are using Tailwind, you can add these to your `tailwind.config.js`:
+
+```javascript
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        cefr: {
+          a1: '#E0E0E0',
+          a2: '#D1D9CE',
+          b1: '#D2E0EB',
+          b2: '#EAD9C8',
+          c1: '#DAC9D2',
+          c2: '#C9D6D6',
+        }
+      }
+    }
+  }
+}
+```

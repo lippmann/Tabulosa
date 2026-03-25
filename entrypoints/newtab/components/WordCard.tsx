@@ -16,14 +16,14 @@ interface WordCardProps {
   language: Language;
 }
 
-// CEFR Level Colors - warm orange style
+// CEFR Level Colors - Soft minimal palette
 const levelColors: Record<CEFRLevel, string> = {
-  A1: 'bg-[#4CAF50]',
-  A2: 'bg-[#2196F3]',
-  B1: 'bg-[#FFC107]',
-  B2: 'bg-[#E07B39]',
-  C1: 'bg-[#9C27B0]',
-  C2: 'bg-[#F44336]',
+  A1: 'bg-[#E0E0E0] text-[#4A4A4A]',
+  A2: 'bg-[#D1D9CE] text-[#4A4A4A]',
+  B1: 'bg-[#D2E0EB] text-[#4A4A4A]',
+  B2: 'bg-[#EAD9C8] text-[#4A4A4A]',
+  C1: 'bg-[#DAC9D2] text-[#4A4A4A]',
+  C2: 'bg-[#C9D6D6] text-[#4A4A4A]',
 };
 
 // Part of Speech display names
@@ -154,7 +154,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.1 }}
         className={cn(
-          'px-4 py-1.5 rounded-full text-white text-sm font-medium shadow-sm mb-8',
+          'px-4 py-1.5 rounded-full text-sm font-medium shadow-sm mb-8',
           levelColor
         )}
       >

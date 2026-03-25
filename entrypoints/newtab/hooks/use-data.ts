@@ -15,14 +15,14 @@ export const savedAtom = atomWithStorage<string[]>(`${KEY}-saved`, []);
 
 export const enabledLevelsAtom = atom<CEFRLevel[]>(get => {
   const settings = get(settingsAtom);
-  return settings.levels
+  return (settings.levels || [])
     .filter(l => l.enabled)
     .map(l => l.level);
 });
 
 export const enabledJLPTLevelsAtom = atom<JLPTLevel[]>(get => {
   const settings = get(settingsAtom);
-  return settings.jlptLevels
+  return (settings.jlptLevels || [])
     .filter(l => l.enabled)
     .map(l => l.level);
 });

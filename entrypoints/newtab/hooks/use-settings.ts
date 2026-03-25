@@ -1,7 +1,7 @@
 import { atom, useAtomValue, useSetAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 
-import type { CEFRLevel, CEFRLevels, Mode, Settings, ThemeMode, Language, JLPTLevel, JLPTLevels } from '../types';
+import type { Settings, ThemeMode, Language } from '../types';
 
 export const KEY = 'tabulosa';
 
@@ -29,19 +29,21 @@ const defaultSettings: Settings = {
 };
 
 export const settingsAtom = atomWithStorage<Settings>(KEY, defaultSettings);
-export const modeAtom = atom(get => get(settingsAtom).mode);
-export const languageAtom = atom(get => get(settingsAtom).language);
-export const levelsAtom = atom(get => get(settingsAtom).levels);
-export const jlptLevelsAtom = atom(get => get(settingsAtom).jlptLevels);
-export const pronunciationAtom = atom(get => get(settingsAtom).pronunciation);
-export const themeAtom = atom(get => get(settingsAtom).theme);
+
+// Derived atoms that ensure default values
+export const modeAtom = atom(get => get(settingsAtom).mode || defaultSettings.mode);
+export const languageAtom = atom(get => get(settingsAtom).language || defaultSettings.language);
+export const levelsAtom = atom(get => get(settingsAtom).levels || defaultSettings.levels);
+export const jlptLevelsAtom = atom(get => get(settingsAtom).jlptLevels || defaultSettings.jlptLevels);
+export const pronunciationAtom = atom(get => get(settingsAtom).pronunciation ?? defaultSettings.pronunciation);
+export const themeAtom = atom(get => get(settingsAtom).theme || defaultSettings.theme);
 
 export function useSettings() {
   const settings = useAtomValue(settingsAtom);
   const setSettings = useSetAtom(settingsAtom);
 
   function updateSettings(newSettings: Partial<Settings>) {
-    setSettings(prev => ({ ...prev, ...newSettings }));
+    setSettings((prev: Settings) => ({ ...prev, ...newSettings }));
   }
 
   function resetSettings() {

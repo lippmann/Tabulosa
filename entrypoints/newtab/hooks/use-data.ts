@@ -2,8 +2,8 @@ import { atom, useAtomValue, useSetAtom, useAtom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 import { useState, useEffect } from 'react';
 
-import { KEY, settingsAtom, modeAtom, languageAtom, jlptLevelsAtom } from './use-settings';
-import type { CEFRLevel, Word, CEFRLevels, JLPTLevel } from '../types';
+import { KEY, settingsAtom, modeAtom, languageAtom, jlptLevelsAtom, levelsAtom } from './use-settings';
+import type { CEFRLevel, Word, JLPTLevel, Settings } from '../types';
 import { LANGUAGES } from '../types';
 
 export { languageAtom } from './use-settings';
@@ -14,15 +14,15 @@ export const metAtom = atomWithStorage<string[]>(`${KEY}-met`, []);
 export const savedAtom = atomWithStorage<string[]>(`${KEY}-saved`, []);
 
 export const enabledLevelsAtom = atom<CEFRLevel[]>(get => {
-  const settings = get(settingsAtom);
-  return (settings.levels || [])
+  const levels = get(levelsAtom) || [];
+  return levels
     .filter(l => l.enabled)
     .map(l => l.level);
 });
 
 export const enabledJLPTLevelsAtom = atom<JLPTLevel[]>(get => {
-  const settings = get(settingsAtom);
-  return (settings.jlptLevels || [])
+  const jlptLevels = get(jlptLevelsAtom) || [];
+  return jlptLevels
     .filter(l => l.enabled)
     .map(l => l.level);
 });
@@ -130,18 +130,18 @@ export function useData() {
   const setSaved = useSetAtom(savedAtom);
 
   function switchLevel(level: CEFRLevel) {
-    setSettings((prev) => ({
+    setSettings((prev: Settings) => ({
       ...prev,
-      levels: (prev.levels || []).map((item: { level: CEFRLevel; enabled: boolean }) => 
+      levels: (prev.levels || []).map((item) => 
         item.level === level ? { ...item, enabled: !item.enabled } : item
       )
     }));
   }
 
   function switchJLPTLevel(level: JLPTLevel) {
-    setSettings((prev) => ({
+    setSettings((prev: Settings) => ({
       ...prev,
-      jlptLevels: (prev.jlptLevels || []).map((item: { level: JLPTLevel; enabled: boolean }) => 
+      jlptLevels: (prev.jlptLevels || []).map((item) => 
         item.level === level ? { ...item, enabled: !item.enabled } : item
       )
     }));

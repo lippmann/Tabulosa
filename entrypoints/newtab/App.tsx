@@ -24,7 +24,7 @@ export default function App() {
     }
   }, []);
   
-  const { randomWord, next } = useRandomWord();
+  const { randomWord, next, restart } = useRandomWord();
   const { addLearned, toggleSaved, resetProgress } = useData();
   const showPronunciation = useAtomValue(pronunciationAtom);
   const savedWords = useAtomValue(savedAtom);
@@ -55,7 +55,7 @@ export default function App() {
 
   const handleRestart = () => {
     resetProgress();
-    next();
+    restart();
   };
 
   const isSaved = randomWord ? savedWords.includes(randomWord.word) : false;

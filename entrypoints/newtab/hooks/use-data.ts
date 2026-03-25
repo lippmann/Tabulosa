@@ -89,6 +89,7 @@ export function useRandomWord() {
   const setMet = useSetAtom(metAtom);
   const [currentWord, setCurrentWord] = useState<Word | null>(null);
   const [firstWord, setFirstWord] = useState<string>('');
+  const [forceReset, setForceReset] = useState(0);
 
   // 当单词数据变化时重置当前单词（检测第一个单词是否变化）
   useEffect(() => {
@@ -105,7 +106,7 @@ export function useRandomWord() {
     if (!currentWord && rest.length > 0) {
       setCurrentWord(rest[Math.floor(Math.random() * rest.length)]);
     }
-  }, [rest, currentWord]);
+  }, [rest, currentWord, forceReset]);
 
   // 切换到下一个单词
   function next() {
@@ -121,7 +122,13 @@ export function useRandomWord() {
     }
   }
 
-  return { randomWord: currentWord, next };
+  // 重新开始（强制重置）
+  function restart() {
+    setCurrentWord(null);
+    setForceReset(p => p + 1);
+  }
+
+  return { randomWord: currentWord, next, restart };
 }
 
 export function useData() {

@@ -127,6 +127,7 @@ export function useRandomWord() {
 export function useData() {
   const setSettings = useSetAtom(settingsAtom);
   const setLearned = useSetAtom(learnedAtom);
+  const setMet = useSetAtom(metAtom);
   const setSaved = useSetAtom(savedAtom);
 
   function switchLevel(level: CEFRLevel) {
@@ -171,5 +172,10 @@ export function useData() {
     setSaved(p => p.filter(word => word !== value));
   }
 
-  return { switchLevel, switchJLPTLevel, addLearned, removeLearned, toggleSaved, removeSaved };
+  function resetProgress() {
+    setLearned([]);
+    setMet([]);
+  }
+
+  return { switchLevel, switchJLPTLevel, addLearned, removeLearned, toggleSaved, removeSaved, resetProgress };
 }

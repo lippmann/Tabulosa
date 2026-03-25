@@ -1,5 +1,5 @@
 import { motion } from 'motion/react';
-import { Volume2, Search, Bookmark, Shuffle } from 'lucide-react';
+import { Volume2, Search, Bookmark, Shuffle, RotateCcw } from 'lucide-react';
 import { cn } from '../lib/utils';
 import type { Word, CEFRLevel, Language, JLPTLevel } from '../types';
 import { CEFR_LEVELS, JLPT_LEVELS, JLPT_LEVEL_COLORS } from '../types';
@@ -11,6 +11,7 @@ interface WordCardProps {
   onLearn: () => void;
   onNext: () => void;
   onSave: () => void;
+  onRestart: () => void;
   isSaved: boolean;
   language: Language;
 }
@@ -48,7 +49,7 @@ function parseFurigana(wordReading: string): { word: string; reading: string } {
   return { word: wordReading, reading: '' };
 }
 
-export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isSaved, language }: WordCardProps) {
+export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onRestart, isSaved, language }: WordCardProps) {
   const isJapanese = language === 'japanese';
 
   if (!word) {
@@ -68,15 +69,26 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
         <p className="text-muted-foreground mb-6">
           You've learned all the words!
         </p>
-        <motion.button
-          onClick={onNext}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="pill-button"
-        >
-          <Shuffle className="w-5 h-5" />
-          <span>Shuffle</span>
-        </motion.button>
+        <div className="flex items-center gap-3">
+          <motion.button
+            onClick={onRestart}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="pill-button"
+          >
+            <RotateCcw className="w-5 h-5" />
+            <span>Start Over</span>
+          </motion.button>
+          <motion.button
+            onClick={onNext}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="pill-button"
+          >
+            <Shuffle className="w-5 h-5" />
+            <span>Shuffle</span>
+          </motion.button>
+        </div>
       </div>
     );
   }

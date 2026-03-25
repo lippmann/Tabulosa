@@ -30,7 +30,7 @@ export default function App() {
   }, []);
   
   const { randomWord, next } = useRandomWord();
-  const { addLearned, toggleSaved } = useData();
+  const { addLearned, toggleSaved, resetProgress } = useData();
   const showPronunciation = useAtomValue(pronunciationAtom);
   const savedWords = useAtomValue(savedAtom);
   const language = useAtomValue(languageAtom);
@@ -56,6 +56,11 @@ export default function App() {
     if (randomWord) {
       toggleSaved(randomWord.word);
     }
+  };
+
+  const handleRestart = () => {
+    resetProgress();
+    next();
   };
 
   const isSaved = randomWord ? savedWords.includes(randomWord.word) : false;
@@ -97,6 +102,7 @@ export default function App() {
           onLearn={handleLearn}
           onNext={handleNext}
           onSave={handleSave}
+          onRestart={handleRestart}
           isSaved={isSaved}
           language={language}
         />

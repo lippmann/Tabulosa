@@ -97,21 +97,21 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
         <div className="flex items-center gap-3">
           <motion.button
             onClick={onRestart}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
-            className="pill-button"
+            className="pill-button-icon"
+            title="Start over"
           >
             <RotateCcw className="w-5 h-5" />
-            <span>Start Over</span>
           </motion.button>
           <motion.button
             onClick={onNext}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
-            className="pill-button"
+            className="pill-button-icon"
+            title="Shuffle"
           >
             <Shuffle className="w-5 h-5" />
-            <span>Shuffle</span>
           </motion.button>
         </div>
       </div>
@@ -242,7 +242,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
         </motion.div>
       )}
 
-      {/* Action Buttons - Pill style */}
+      {/* Action Buttons - Icon only */}
       <motion.div
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -254,37 +254,37 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
           href={getDictionaryUrl(word.word, language)}
           target="_blank"
           rel="noopener noreferrer"
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="pill-button cursor-pointer"
+          className="pill-button-icon"
+          title="Search in dictionary"
         >
-          <Search className="w-4 h-4" />
-          <span>Search</span>
+          <Search className="w-5 h-5" />
         </motion.a>
         
         {/* Save Button */}
         <motion.button
           onClick={onSave}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           className={cn(
-            "pill-button",
+            "pill-button-icon",
             isSaved && "bg-primary text-white"
           )}
+          title={isSaved ? 'Remove from saved' : 'Save word'}
         >
-          <Bookmark className={cn("w-4 h-4", isSaved && "fill-current")} />
-          <span>{isSaved ? 'Saved' : 'Save'}</span>
+          <Bookmark className={cn("w-5 h-5", isSaved && "fill-current")} />
         </motion.button>
         
         {/* Shuffle Button */}
         <motion.button
           onClick={onNext}
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="pill-button"
+          className="pill-button-icon"
+          title="Next word"
         >
-          <Shuffle className="w-4 h-4" />
-          <span>Shuffle</span>
+          <Shuffle className="w-5 h-5" />
         </motion.button>
       </motion.div>
     </motion.div>

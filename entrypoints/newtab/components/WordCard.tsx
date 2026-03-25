@@ -162,13 +162,13 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, isS
         {!isJapanese && (
           <>
             {word.pos && (
-              <span className="text-xl text-muted-foreground">
+              <span className="px-3 py-0.5 bg-secondary rounded-full text-sm text-foreground font-medium">
                 {posDisplay[word.pos] || word.pos}
               </span>
             )}
             {word.word_frequency > 0 && (
-              <span className="text-xl text-muted-foreground">
-                [{word.word_frequency}]
+              <span className="px-3 py-0.5 bg-secondary rounded-full text-sm text-foreground font-medium">
+                {word.word_frequency}
               </span>
             )}
           </>

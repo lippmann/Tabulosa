@@ -39,7 +39,7 @@ const themeOptions: { value: ThemeMode; label: string; icon: typeof Sun }[] = [
 export function Settings({ isOpen, onClose }: SettingsProps) {
   const { settings, updateSettings, resetSettings, setTheme, setLanguage } = useSettings();
   const { switchLevel, switchJLPTLevel, removeSaved } = useData();
-  const savedWords = useAtomValue(savedWordsAtom);
+  const savedWords = useAtomValue(savedWordsAtom) || [];
   const language = useAtomValue(languageAtom);
 
   const currentTheme = settings.theme || 'light';
@@ -263,7 +263,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                 <div className="space-y-2">
                   {isJapanese ? (
                     // JLPT Level Selection
-                    settings.jlptLevels.map((item) => {
+                    (settings.jlptLevels || []).map((item) => {
                       const levelInfo = JLPT_LEVELS[item.level];
                       return (
                         <button
@@ -300,7 +300,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                     })
                   ) : (
                     // CEFR Level Selection
-                    settings.levels.map((item) => {
+                    (settings.levels || []).map((item) => {
                       const levelInfo = CEFR_LEVELS[item.level];
                       return (
                         <button

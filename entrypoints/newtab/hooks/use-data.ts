@@ -28,13 +28,13 @@ export const enabledJLPTLevelsAtom = atom<JLPTLevel[]>(get => {
 });
 
 export const restOfWordsAtom = atom<Word[]>(get => {
-  const words = get(wordsAtom);
-  const learned = get(learnedAtom);
-  const met = get(metAtom);
+  const words = get(wordsAtom) || [];
+  const learned = get(learnedAtom) || [];
+  const met = get(metAtom) || [];
   const mode = get(modeAtom);
   const language = get(languageAtom);
-  const enabledLevels = get(enabledLevelsAtom);
-  const enabledJLPTLevels = get(enabledJLPTLevelsAtom);
+  const enabledLevels = get(enabledLevelsAtom) || [];
+  const enabledJLPTLevels = get(enabledJLPTLevelsAtom) || [];
 
   const isJapanese = language === 'japanese';
 
@@ -57,8 +57,8 @@ export const restOfWordsAtom = atom<Word[]>(get => {
 });
 
 export const learnedWordsAtom = atom<Word[]>(get => {
-  const learned = get(learnedAtom);
-  const words = get(wordsAtom);
+  const learned = get(learnedAtom) || [];
+  const words = get(wordsAtom) || [];
   const result = [];
 
   for (const word of learned) {
@@ -70,8 +70,8 @@ export const learnedWordsAtom = atom<Word[]>(get => {
 });
 
 export const savedWordsAtom = atom<Word[]>(get => {
-  const saved = get(savedAtom);
-  const words = get(wordsAtom);
+  const saved = get(savedAtom) || [];
+  const words = get(wordsAtom) || [];
   const result = [];
 
   for (const word of saved) {
@@ -132,7 +132,7 @@ export function useData() {
   function switchLevel(level: CEFRLevel) {
     setSettings((prev) => ({
       ...prev,
-      levels: prev.levels.map((item: { level: CEFRLevel; enabled: boolean }) => 
+      levels: (prev.levels || []).map((item: { level: CEFRLevel; enabled: boolean }) => 
         item.level === level ? { ...item, enabled: !item.enabled } : item
       )
     }));
@@ -141,7 +141,7 @@ export function useData() {
   function switchJLPTLevel(level: JLPTLevel) {
     setSettings((prev) => ({
       ...prev,
-      jlptLevels: prev.jlptLevels.map((item: { level: JLPTLevel; enabled: boolean }) => 
+      jlptLevels: (prev.jlptLevels || []).map((item: { level: JLPTLevel; enabled: boolean }) => 
         item.level === level ? { ...item, enabled: !item.enabled } : item
       )
     }));

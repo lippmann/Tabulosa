@@ -39,7 +39,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     name: 'French',
     nativeName: 'Français',
     speechLang: 'fr-FR',
-    dictionaryUrl: (word) => `https://www.wordreference.com/enfr/${encodeURIComponent(word)}`,
+    dictionaryUrl: (word) => `https://www.collinsdictionary.com/dictionary/french-english/${encodeURIComponent(word)}`,
     flagSvg: '/flags/fr.svg',
   },
   german: {
@@ -47,7 +47,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     name: 'German',
     nativeName: 'Deutsch',
     speechLang: 'de-DE',
-    dictionaryUrl: (word) => `https://www.wordreference.com/deen/${encodeURIComponent(word)}`,
+    dictionaryUrl: (word) => `https://dict.cc/?s=${encodeURIComponent(word)}`,
     flagSvg: '/flags/de.svg',
   },
   italian: {
@@ -55,7 +55,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     name: 'Italian',
     nativeName: 'Italiano',
     speechLang: 'it-IT',
-    dictionaryUrl: (word) => `https://www.wordreference.com/iten/${encodeURIComponent(word)}`,
+    dictionaryUrl: (word) => `https://www.collinsdictionary.com/dictionary/italian-english/${encodeURIComponent(word)}`,
     flagSvg: '/flags/it.svg',
   },
   portuguese: {
@@ -63,7 +63,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     name: 'Portuguese',
     nativeName: 'Português',
     speechLang: 'pt-PT',
-    dictionaryUrl: (word) => `https://www.wordreference.com/pten/${encodeURIComponent(word)}`,
+    dictionaryUrl: (word) => `https://www.collinsdictionary.com/dictionary/portuguese-english/${encodeURIComponent(word)}`,
     flagSvg: '/flags/pt.svg',
   },
   mandarin: {
@@ -71,7 +71,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     name: 'Mandarin',
     nativeName: '中文',
     speechLang: 'zh-CN',
-    dictionaryUrl: (word) => `https://www.wordreference.com/zhen/${encodeURIComponent(word)}`,
+    dictionaryUrl: (word) => `https://www.mdbg.net/chinese/dictionary?page=worddict&wdrst=0&wdqb=${encodeURIComponent(word)}`,
     flagSvg: '/flags/cn.svg',
   },
   korean: {
@@ -79,7 +79,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     name: 'Korean',
     nativeName: '한국어',
     speechLang: 'ko-KR',
-    dictionaryUrl: (word) => `https://www.wordreference.com/koen/${encodeURIComponent(word)}`,
+    dictionaryUrl: (word) => `https://dict.naver.com/dict.search?query=${encodeURIComponent(word)}`,
     flagSvg: '/flags/kr.svg',
   },
   japanese: {
@@ -96,7 +96,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     name: 'Arabic',
     nativeName: 'العربية',
     speechLang: 'ar-SA',
-    dictionaryUrl: (word) => `https://www.wordreference.com/aren/${encodeURIComponent(word)}`,
+    dictionaryUrl: (word) => `https://www.almaany.com/ar/dict/${encodeURIComponent(word)}`,
     flagSvg: '/flags/sa.svg',
   },
   russian: {
@@ -104,7 +104,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     name: 'Russian',
     nativeName: 'Русский',
     speechLang: 'ru-RU',
-    dictionaryUrl: (word) => `https://www.wordreference.com/ruen/${encodeURIComponent(word)}`,
+    dictionaryUrl: (word) => `https://context.reverso.net/translation/russian-english/${encodeURIComponent(word)}`,
     flagSvg: '/flags/ru.svg',
   },
   hindi: {
@@ -112,7 +112,7 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     name: 'Hindi',
     nativeName: 'हिन्दी',
     speechLang: 'hi-IN',
-    dictionaryUrl: (word) => `https://www.wordreference.com/hien/${encodeURIComponent(word)}`,
+    dictionaryUrl: (word) => `https://www.shabdkosh.com/dictionary/hindi-english/${encodeURIComponent(word)}`,
     flagSvg: '/flags/in.svg',
   },
   english: {

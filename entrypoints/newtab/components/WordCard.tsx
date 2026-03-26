@@ -82,6 +82,16 @@ function renderFurigana(wordReading: string) {
 export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onRestart, isSaved, language }: WordCardProps) {
   const isJapanese = language === 'japanese';
 
+  // Get language-specific font class suffix
+  const getFontSuffix = () => {
+    if (language === 'japanese') return '-jp';
+    if (language === 'korean') return '-kr';
+    if (language === 'mandarin') return '-cn';
+    return '';
+  };
+  
+  const fontSuffix = getFontSuffix();
+
   if (!word) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] text-center animate-fade-in">
@@ -174,11 +184,11 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
         className="relative mb-4"
       >
         {isJapanese && word.word_reading ? (
-          <h1 className="text-5xl md:text-6xl font-bold text-foreground font-serif-display ruby-container">
+          <h1 className={`text-5xl md:text-6xl font-bold text-foreground font-serif-display${fontSuffix} ruby-container`}>
             {renderFurigana(word.word_reading)}
           </h1>
         ) : (
-          <h1 className="text-5xl md:text-6xl font-bold text-foreground font-serif-display">
+          <h1 className={`text-5xl md:text-6xl font-bold text-foreground font-serif-display${fontSuffix}`}>
             {word.word}
           </h1>
         )}
@@ -230,7 +240,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
           className="max-w-xl text-center mb-10"
         >
           <div className="relative mb-1">
-            <p className="text-base text-foreground font-sans-example">
+            <p className={`text-base text-foreground font-sans-example${fontSuffix}`}>
               {word.example_sentence_native}
             </p>
             <button

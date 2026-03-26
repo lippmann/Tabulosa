@@ -82,15 +82,23 @@ function renderFurigana(wordReading: string) {
 export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onRestart, isSaved, language }: WordCardProps) {
   const isJapanese = language === 'japanese';
 
-  // Get language-specific font class suffix
-  const getFontSuffix = () => {
-    if (language === 'japanese') return '-jp';
-    if (language === 'korean') return '-kr';
-    if (language === 'mandarin') return '-cn';
-    return '';
+  // Get language-specific font families
+  const getSerifFont = () => {
+    if (language === 'japanese') return "'Noto Serif JP', Georgia, 'Times New Roman', serif";
+    if (language === 'korean') return "'Noto Serif KR', Georgia, 'Times New Roman', serif";
+    if (language === 'mandarin') return "'Noto Serif SC', Georgia, 'Times New Roman', serif";
+    return "Georgia, 'Times New Roman', Times, serif";
   };
   
-  const fontSuffix = getFontSuffix();
+  const getSansFont = () => {
+    if (language === 'japanese') return "'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+    if (language === 'korean') return "'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+    if (language === 'mandarin') return "'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+    return "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
+  };
+  
+  const serifFont = getSerifFont();
+  const sansFont = getSansFont();
 
   if (!word) {
     return (
@@ -184,11 +192,11 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
         className="relative mb-4"
       >
         {isJapanese && word.word_reading ? (
-          <h1 className={`text-5xl md:text-6xl font-bold text-foreground font-serif-display${fontSuffix} ruby-container`}>
+          <h1 className="text-5xl md:text-6xl font-bold text-foreground ruby-container" style={{ fontFamily: serifFont }}>
             {renderFurigana(word.word_reading)}
           </h1>
         ) : (
-          <h1 className={`text-5xl md:text-6xl font-bold text-foreground font-serif-display${fontSuffix}`}>
+          <h1 className="text-5xl md:text-6xl font-bold text-foreground" style={{ fontFamily: serifFont }}>
             {word.word}
           </h1>
         )}
@@ -240,7 +248,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
           className="max-w-xl text-center mb-10"
         >
           <div className="relative mb-1">
-            <p className={`text-base text-foreground font-sans-example${fontSuffix}`}>
+            <p className="text-base text-foreground" style={{ fontFamily: sansFont }}>
               {word.example_sentence_native}
             </p>
             <button

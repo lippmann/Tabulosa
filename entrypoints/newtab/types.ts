@@ -12,7 +12,7 @@ export type JLPTLevels = Array<{ level: JLPTLevel; enabled: boolean }>;
 export type PartOfSpeech = 'noun' | 'verb' | 'adjective' | 'adverb' | 'pronoun' | 'preposition' | 'conjunction' | 'interjection' | 'article' | 'determiner';
 
 // Supported Languages
-export type Language = 'spanish' | 'french' | 'german' | 'italian' | 'portuguese' | 'mandarin' | 'korean' | 'japanese' | 'arabic' | 'russian' | 'hindi';
+export type Language = 'spanish' | 'french' | 'german' | 'italian' | 'portuguese' | 'mandarin' | 'korean' | 'japanese' | 'arabic' | 'russian' | 'hindi' | 'english';
 
 // Language configuration
 export interface LanguageConfig {
@@ -114,6 +114,14 @@ export const LANGUAGES: Record<Language, LanguageConfig> = {
     speechLang: 'hi-IN',
     dictionaryUrl: (word) => `https://www.wordreference.com/hien/${encodeURIComponent(word)}`,
     flagSvg: '/flags/in.svg',
+  },
+  english: {
+    code: 'english',
+    name: 'English',
+    nativeName: 'English',
+    speechLang: 'en-GB',
+    dictionaryUrl: (word) => `https://www.oxfordlearnersdictionaries.com/definition/english/${encodeURIComponent(word)}`,
+    flagSvg: '/flags/gb.svg',
   },
 };
 

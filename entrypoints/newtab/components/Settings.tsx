@@ -294,9 +294,6 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                               <div className="text-xs text-muted-foreground mt-0.5">
                                 {levelInfo.description}
                               </div>
-                              <div className="text-xs text-muted-foreground">
-                                Vocabulary: {levelInfo.vocabulary}
-                              </div>
                             </div>
                           </div>
                         </button>
@@ -330,9 +327,6 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                               </div>
                               <div className="text-xs text-muted-foreground mt-0.5">
                                 {levelInfo.description}
-                              </div>
-                              <div className="text-xs text-muted-foreground">
-                                Vocabulary: {levelInfo.vocabulary}
                               </div>
                             </div>
                           </div>

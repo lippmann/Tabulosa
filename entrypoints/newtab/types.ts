@@ -148,65 +148,54 @@ export interface Settings {
 }
 
 // CEFR Level Information
-export const CEFR_LEVELS: Record<CEFRLevel, { label: string; description: string; vocabulary: string }> = {
+export const CEFR_LEVELS: Record<CEFRLevel, { label: string; description: string }> = {
   A1: {
     label: 'Beginner (A1)',
     description: 'Basic everyday communication',
-    vocabulary: '900-1000'
   },
   A2: {
     label: 'Elementary (A2)',
     description: 'Simple daily situations',
-    vocabulary: '2000-3000'
   },
   B1: {
     label: 'Intermediate (B1)',
     description: 'Independent communication',
-    vocabulary: '5000-6000'
   },
   B2: {
     label: 'Upper-Int (B2)',
     description: 'Professional communication',
-    vocabulary: '7000-8000'
   },
   C1: {
     label: 'Advanced (C1)',
     description: 'Near-native fluency',
-    vocabulary: '10000+'
   },
   C2: {
     label: 'Proficiency (C2)',
     description: 'Full mastery, native-like',
-    vocabulary: '15000+'
   }
 };
 
 // JLPT Level Information
-export const JLPT_LEVELS: Record<JLPTLevel, { label: string; description: string; vocabulary: string }> = {
+export const JLPT_LEVELS: Record<JLPTLevel, { label: string; description: string }> = {
   N5: {
     label: 'Beginner (N5)',
     description: 'Basic daily conversation, simple questions',
-    vocabulary: '~800 words'
   },
   N4: {
     label: 'Elementary (N4)',
     description: 'Everyday situations, basic opinions',
-    vocabulary: '~1,500 words'
   },
   N3: {
     label: 'Intermediate (N3)',
     description: 'Abstract concepts, nuanced expressions',
-    vocabulary: '~3,750 words'
   },
   N2: {
     label: 'Pre-Advanced (N2)',
     description: 'Business conversations, newspapers',
-    vocabulary: '~6,000 words'
   },
   N1: {
     label: 'Advanced (N1)',
     description: 'Academic discussions, novels',
-    vocabulary: '~10,000 words'
   }
 };
 

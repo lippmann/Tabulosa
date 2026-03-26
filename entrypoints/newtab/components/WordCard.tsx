@@ -230,7 +230,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
           className="max-w-xl text-center mb-10"
         >
           <div className="relative mb-1">
-            <p className="text-base text-foreground">
+            <p className="text-base text-foreground font-sans-example">
               {word.example_sentence_native}
             </p>
             <button

@@ -287,7 +287,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                             )}>
                               {item.level}
                             </div>
-                            <div>
+                            <div className="flex-1">
                               <div className="font-medium text-foreground">
                                 {levelInfo.label}
                               </div>
@@ -295,6 +295,9 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                                 {levelInfo.description}
                               </div>
                             </div>
+                            {item.enabled && (
+                              <Check className="w-5 h-5 text-primary" />
+                            )}
                           </div>
                         </button>
                       );
@@ -321,7 +324,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                             )}>
                               {item.level}
                             </div>
-                            <div>
+                            <div className="flex-1">
                               <div className="font-medium text-foreground">
                                 {levelInfo.label}
                               </div>
@@ -329,6 +332,9 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                                 {levelInfo.description}
                               </div>
                             </div>
+                            {item.enabled && (
+                              <Check className="w-5 h-5 text-primary" />
+                            )}
                           </div>
                         </button>
                       );

@@ -82,23 +82,23 @@ function renderFurigana(wordReading: string) {
 export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onRestart, isSaved, language }: WordCardProps) {
   const isJapanese = language === 'japanese';
 
-  // Get language-specific font families
-  const getSerifFont = () => {
-    if (language === 'japanese') return "'Noto Serif JP', Georgia, 'Times New Roman', serif";
-    if (language === 'korean') return "'Noto Serif KR', Georgia, 'Times New Roman', serif";
-    if (language === 'mandarin') return "'Noto Serif SC', Georgia, 'Times New Roman', serif";
+  // Get language-specific CSS variable for font family
+  const getSerifFontVar = () => {
+    if (language === 'japanese') return 'var(--font-serif-jp)';
+    if (language === 'korean') return 'var(--font-serif-kr)';
+    if (language === 'mandarin') return 'var(--font-serif-cn)';
     return "Georgia, 'Times New Roman', Times, serif";
   };
   
-  const getSansFont = () => {
-    if (language === 'japanese') return "'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-    if (language === 'korean') return "'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-    if (language === 'mandarin') return "'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  const getSansFontVar = () => {
+    if (language === 'japanese') return 'var(--font-sans-jp)';
+    if (language === 'korean') return 'var(--font-sans-kr)';
+    if (language === 'mandarin') return 'var(--font-sans-cn)';
     return "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
   };
   
-  const serifFont = getSerifFont();
-  const sansFont = getSansFont();
+  const serifFont = getSerifFontVar();
+  const sansFont = getSansFontVar();
 
   if (!word) {
     return (

@@ -151,27 +151,27 @@ export interface Settings {
 export const CEFR_LEVELS: Record<CEFRLevel, { label: string; description: string; vocabulary: string }> = {
   A1: {
     label: 'Beginner (A1)',
-    description: 'Basic everyday communication, ~900-1000 words',
+    description: 'Basic everyday communication',
     vocabulary: '900-1000'
   },
   A2: {
     label: 'Elementary (A2)',
-    description: 'Simple daily situations, ~2000-3000 words',
+    description: 'Simple daily situations',
     vocabulary: '2000-3000'
   },
   B1: {
     label: 'Intermediate (B1)',
-    description: 'Independent communication, ~5000-6000 words',
+    description: 'Independent communication',
     vocabulary: '5000-6000'
   },
   B2: {
     label: 'Upper-Int (B2)',
-    description: 'Professional communication, ~7000-8000 words',
+    description: 'Professional communication',
     vocabulary: '7000-8000'
   },
   C1: {
     label: 'Advanced (C1)',
-    description: 'Near-native fluency, ~10000+ words',
+    description: 'Near-native fluency',
     vocabulary: '10000+'
   },
   C2: {

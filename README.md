@@ -12,9 +12,17 @@
 
 ---
 
+## Demo
+
+<div align="center">
+  <img src="screenshots/demo.png" alt="Tabulosa Demo" width="600">
+</div>
+
+---
+
 ## Features
 
-- **11 Languages Supported** - Spanish, French, German, Italian, Portuguese, Japanese, Korean, Mandarin, Arabic, Russian, and Hindi
+- **12 Languages Supported** - Spanish, French, German, Italian, Portuguese, Japanese, Korean, Mandarin, Arabic, Russian, Hindi, and English
 - **Clean, Minimal Design** - Distraction-free learning with a warm cream background and elegant typography
 - **Offline Ready** - All vocabulary stored locally, works without internet
 - **Smart Level System** - CEFR levels (A1-C2) for all languages, JLPT levels (N5-N1) for Japanese
@@ -36,6 +44,7 @@
 | 🇸🇦 Arabic | العربية | A1-C2 |
 | 🇷🇺 Russian | Русский | A1-C2 |
 | 🇮🇳 Hindi | हिन्दी | A1-C2 |
+| 🇬🇧 English | English | A1-C2 |
 
 ---
 

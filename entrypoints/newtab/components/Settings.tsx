@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { Settings as SettingsIcon, X, Check, Sun, Moon, Trash2, Volume2, Bookmark, Download } from 'lucide-react';
+import { Settings as SettingsIcon, X, Check, Sun, Moon, Trash2, Volume2, Bookmark, Download, Github } from 'lucide-react';
 import { useAtomValue } from 'jotai';
 import * as XLSX from 'xlsx';
 import { useSettings } from '../hooks/use-settings';
@@ -448,6 +448,19 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                     ))}
                   </div>
                 )}
+              </div>
+
+              {/* GitHub Link */}
+              <div className="pt-6 mt-6 border-t border-border">
+                <a
+                  href="https://github.com/lippmann/Tabulosa"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 text-muted-foreground hover:text-primary transition-colors text-sm"
+                >
+                  <Github className="w-4 h-4" />
+                  <span>Tabulosa on GitHub</span>
+                </a>
               </div>
             </div>
           </motion.div>

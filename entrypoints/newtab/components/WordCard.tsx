@@ -223,14 +223,6 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
                 {posDisplay[word.pos] || word.pos}
               </span>
             )}
-            {word.word_frequency > 0 && (
-              <span 
-                className="px-3 py-0.5 bg-secondary rounded-full text-sm text-foreground font-medium cursor-help"
-                title="Word frequency - lower numbers indicate more common words"
-              >
-                {word.word_frequency}
-              </span>
-            )}
           </>
         )}
         

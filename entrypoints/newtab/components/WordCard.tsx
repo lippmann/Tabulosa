@@ -5,6 +5,11 @@ import type { Word, CEFRLevel, Language, JLPTLevel } from '../types';
 import { CEFR_LEVELS, JLPT_LEVELS, JLPT_LEVEL_COLORS } from '../types';
 import { speakText, getDictionaryUrl } from '../hooks/use-vocab';
 
+// Format translation: add space after semicolon if missing
+function formatTranslation(text: string): string {
+  return text.replace(/;(?!\s)/g, '; ');
+}
+
 interface WordCardProps {
   word: Word | null;
   showPronunciation: boolean;
@@ -212,7 +217,7 @@ export function WordCard({ word, showPronunciation, onLearn, onNext, onSave, onR
         )}
         
         <span className="text-xl text-muted-foreground">
-          {word.english_translation}
+          {formatTranslation(word.english_translation)}
         </span>
       </motion.div>
 

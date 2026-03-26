@@ -36,6 +36,11 @@ const themeOptions: { value: ThemeMode; label: string; icon: typeof Sun }[] = [
   { value: 'dark', label: 'Dark', icon: Moon },
 ];
 
+// Format translation: add space after semicolon if missing
+function formatTranslation(text: string): string {
+  return text.replace(/;(?!\s)/g, '; ');
+}
+
 export function Settings({ isOpen, onClose }: SettingsProps) {
   const { settings, updateSettings, resetSettings, setTheme, setLanguage } = useSettings();
   const { switchLevel, switchJLPTLevel, removeSaved } = useData();
@@ -419,7 +424,7 @@ export function Settings({ isOpen, onClose }: SettingsProps) {
                               {word.word}
                             </div>
                             <div className="text-xs text-muted-foreground truncate">
-                              {word.english_translation}
+                              {formatTranslation(word.english_translation)}
                             </div>
                           </div>
                         </div>
